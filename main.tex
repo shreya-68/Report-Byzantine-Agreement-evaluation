@@ -1,0 +1,72 @@
+
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{float}
+\usepackage{lipsum}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{stmaryrd}
+\usepackage[ruled, vlined, linesnumbered]{algorithm2e}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{cancel}
+\usepackage{wrapfig}
+
+\lstset{language=C}
+
+%\newtheorem{claim}{Claim}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+% \newtheorem{corollary}{Corollary}
+% \newtheorem{example}{Example}
+% \newtheorem{observation}{Observation}
+% \newtheorem{definition}{Definition}
+\newtheorem{instance}{Instance}
+\newtheorem{observation}{Observation}
+ 
+\graphicspath{{figs/}}
+\newcommand\tuple[1]{\langle #1 \rangle}
+
+
+\pagestyle{plain}
+\pagenumbering{arabic}
+
+
+
+\makeatletter
+\newenvironment{Ualgorithm}[1][H]
+  { \def\@algocf@capt@plain{top}% 
+    \begin{algorithm}[#1]}
+  {\end{algorithm}}
+\makeatother
+
+\usepackage{etoolbox}
+\makeatletter
+\pretocmd\start@align{%
+  \if@minipage\kern-\topskip\kern-\abovedisplayskip\fi
+}{}{}
+\makeatother
+
+
+\begin{document}
+\nocite{*}
+\input{abs}
+\input{intro}
+\input{back}
+\input{algo}
+%\input{eval}
+%\input{conc}
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+
+\end{document}

@@ -1,0 +1,19 @@
+\title{A System Performance Comparison of Byzantine Agreement in Distributed Systems}
+%\subtitle{CS654 Project Proposal}
+
+
+%\author{
+%\IEEEauthorblockN{Shreya Agrawal}
+%\IEEEauthorblockA{School of Computer Science\\
+%University of Waterloo\\
+%s8agrawa@uwaterloo.ca }}
+
+\maketitle
+
+\begin{abstract}
+
+Ensuring all the processes in a network agree on all decisions in the presence of byzantine processes is known to be a challenging task in distributed applications. This is fundamentally due to two reasons: (1) asynchronous execution of systems, and (2) a high ratio of byzantine nodes colluding together to inject arbitrary values in a synchronous system. These issues pose a problem to the scalability, safety and liveness conditions, reliability and performance of the system. Impossibility results have been shown for deterministic solutions for the first case, even in the presence of one fault. For the second case, many researchers have taken various approaches to find better performing solutions. While strong theoretical results give us an insight into the efficiency of an algorithm, they sometimes come with large hidden constants and might not be practical for a real system. In this paper, we compare the relative performance of two randomized algorithms, one using the concept of {\em quorums} and the other using the {\em pull-push} approach, and a recent deterministic algorithm to show that simple algorithms may perform better in certain cases. We do this by implementing a testbed environment. Two metrics have been used for comparison - {\em message} complexity and {\em time} complexity with respect to varying network sizes and faulty processes. Using these we identify instances, depending on resource constraints and possibility of number of faults, where each of these algorithms perform differently.
+
+\end{abstract}
+
+\noindent {\bf Keywords:} Distributed systems, Performance, Byzantine failures, Fault-tolerant, Consensus, Complexity.

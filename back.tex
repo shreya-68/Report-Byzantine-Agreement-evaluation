@@ -1,0 +1,49 @@
+﻿\section{Background}
+\label{sec:background}
+
+\subsection{Problem statement}
+The problem of Byzantine Agreement, in its most basic form is defined as follows
+
+\begin{definition}
+Let $\mathcal{P}$ be a protocol among $n$ processes $P = \{ P_1, P_2, \dots, P_n\}$, such that $B \subset P$ processes are byzantine. Each player $P_i$ starts with an input bit $b_i$, and $P_i$ outputs a bit $c_i$ at the end of the protocol. $P$ is a Byzantine Agreement Protocol, if the following conditions hold:
+\begin{itemize}
+    \item \textit{Consistency}: For any two non-faulty processes $P_i$ and $P_j \in P \backslash B$, $c_i = c_j$.
+    \item \textit{Validity}: If $b_i = b$ for all non-faulty processes $P_i \in P \backslash B$, then $c_i = b$ for all non-faulty processes $P_i$.
+    \item \textit{Termination}: Protocol $\mathcal{P}$ terminates with probability $1$.
+\end{itemize}
+\end{definition}
+
+A protocol is said to be $k$-fault tolerant if it operates correctly as long as no more than $k$ processes fail during execution. The following theorem by \cite{LamportSP82,PeaseSL80} shows the impossibility result when $k \geq n/3$.
+
+\begin{theorem}
+There is a $k$-fault tolerant synchronous protocol to solve the byzantine agreement problem iff $k < n/3$.
+\end{theorem}
+
+\subsection{Complexity measures}
+
+The practicality of agreement protocols depends heavily on their computational complexity. When talking about complexity measures of algorithms for distributed consensus, one generally uses the following two metrics:
+\begin{itemize}
+\item \textit{Time} complexity, that is the number of rounds of message exchange before all the non-faulty processes decide.
+\item \textit{Message} complexity, that is the total number of messages sent or the total number of bits in those messages.
+\end{itemize}
+All of these quantities are in general dependent on which faults occur and when. As the size of the system increases, i.e., the number of processes increase, the expected number of faults grows linearly with it. 
+
+\subsection{Previous work}
+
+\subsubsection{Deterministic Solutions}
+Fischer and Lynch \cite{Fischer81alower} proved that $k + 1$ is the time complexity in the worst case. If the messages were not \textit{authenticated}, the message complexity was initially shown to be exponential in the number of process in \cite{PeaseSL80}. In 1998, Garay and Moses \cite{GarayM98}, with modifications to the two phase protocol of \cite{BDDS87} using the EIG data structure, improved the message complexity further to polynomial time. If authenticated messages were sent, Dolev and Reischuk \cite{DolevR85}, proposed an algorithm using $O(n + k^2)$ messages. In an attempt to lower the communication costs, researchers either lowered the fraction of faulty processes to a smaller number \cite{} or increased the maximum number of rounds needed in the worst case \cite{}. It was only recently that Kowalski et al. \cite{} proposed a simple algorithm that holds for the optimal range and optimal number of communication rounds while lowering the communication complexity to $O(n^{3}logn)$.
+
+\subsubsection{Randomized Solutions}
+Probabilistic solutions were proposed to circumvent the lower bounds on time and message complexity imposed by deterministic settings. They used the idea of a common coin, which was seen as `sufficiently random' by `sufficiently many random' processes. 
+In the asynchronous setting, using randomized algorithms, Ben-Or \cite{Ben-Or83} showed that if $k < n/5$, then consensus is achievable with probability $1$. Rabin \cite{Rabin83} showed constant expected time complexity if $k < n/4$. Greatly improved results have been shown in \cite{PCR14, KKKSS08, MHR14} for non-adaptive adversary and in \cite{KS13,AAKS14} for an adaptive adversary. Assuming that communication channels are \textit{private} between every pair of processes, the algorithm proposed in \cite{PR10}, shows constant expected time complexity and $\tilde{O}(n^2)$ message complexity\footnote{$\tilde{O}$ is same as $O$ up to a poly-logarithmic factor}. These bounds are also applicable to the asynchronous setting. In \cite{HKK08}, the authors proved an $\Omega(\sqrt[3]{n})$ lower bound on both message complexity and time complexities for synchronous systems, under some restrictive assumptions.
+
+\subsubsection{Almost-everywhere Solutions}
+The \textit{almost-everywhere} byzantine agreement problem, was introduced by Dwork et al. in \cite{DPPU88}. It is a relaxed version of the Byzantine Agreement problem and requires all but an $O(log^{-1}n)$ fraction of the nodes to agree on a common output. In \cite{KSSV06}, the the time and message complexities are poly-logarithmic in $n$ for each node. Construction of Byzantine Agreement from \textit{almost-everywhere} byzantine agreement, called \textit{almost-everywhere} reduction was proposed in \cite{KS09,KLST11}, using $\tilde{O}(\sqrt{n})$ bits per node and poly-logarithmic time. 
+Papers like \cite{KLST11} used push-pull protocols, the complexity of which is dictated by the complexity of the first \textit{push} phase and the size of the candidate lists, i.e., the number of all possible outputs. \cite{BGH13}  also proposes an almost everywhere to everywhere solution using the almost everywhere algorithm of \cite{KSSV06}.
+
+
+\subsubsection{Experimental Evaluations}
+Many surveys have been done reporting the various theoretical results for the Byzantine Agreement problem. In a recent paper, by Bruno Vavala \cite{VN12}, which implemented Bracha's algorithm \cite{Bracha84} to bridge the gap between theory and practice, reported that the literature is poor in the experimental evaluations for Byzantine Agreement algorithms. They showed that Bracha's algorithm terminates in constant time if only crash failures occur and in normal conditions, whereas theoretically it takes exponential number of rounds to terminate due to the worst-case scenario. They use an averaging method, approximations and some stochastic techniques for analysis of the protocol. They ran the experiments for upto 100 processes and reported the time complexity results. In \cite{LSV12}, by Liang et al., three different byzantine fault-tolerant state machine protocols have been implemented for analysis - 1) the classic solution by Pease et al. \cite{PeaseSL80}, 2) practical BFT protocol by Castro and Liskov \cite{CL02}, and 3) a network coding based BFT that they propose in the paper. For state replication protocols, it is important for processes to agree upon an order to process the requests and in this experimental evaluation the authors concentrated on implementing a Byzantine Broadcast algorithm to achieve the same. We consider byzantine broadcast as only a part of achieving consensus among processes and hence consider it important to analyze the efficiency of the complete byzantine agreement algorithm. They reported the time elapsed when the batch size of the requests is varied and for $4$ servers. Oluwasanmi, Saia, and King, in \cite{OSK10} improve upon the algorithm given in \cite{KS09} which was shown to be impractical when implemented due to large hidden constants. They weaken the control of the adversary to only $1/8$ fraction of the nodes. They implement and compare their algorithm with Cachin et al.'s \cite{CKS05} with the size of the network simulated between $1,000$ to $4,000,000$ processors. They used average number of messages and bits sent per node as well as latency for comparison.
+
+Most of these experimental evaluations have either used a synchronous model or partial synchrony for simplicity. The algorithms we have chosen allow us to differentiate and compare different randomized as well as deterministic algorithms which makes it necessary to use a synchronous setting due to the impossibility results for the asynchronous case. 
+
