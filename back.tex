@@ -23,10 +23,12 @@ There is a $k$-fault tolerant synchronous protocol to solve the byzantine agreem
 
 The practicality of agreement protocols depends heavily on their computational complexity. When talking about complexity measures of algorithms for distributed consensus, one generally uses the following two metrics:
 \begin{itemize}
-\item \textit{Time} complexity, that is the number of rounds of message exchange before all the non-faulty processes decide.
-\item \textit{Message} complexity, that is the total number of messages sent or the total number of bits in those messages.
+\item \textit{Round} complexity, that is the number of rounds of message exchange before all the non-faulty processes decide.
+\item \textit{Communication} complexity, that is the total number of messages sent per node or the total number of bits sent per node.
+\item \textit{Time} complexity, is the overall CPU time utilisation from start till all the non-faulty processes decide.
+\item \textit{Memory} comsumption, is the memory requirement for the execution of an alorithm for a configuration and depends mainly upon the data structures used for storing of values.
 \end{itemize}
-All of these quantities are in general dependent on which faults occur and when. As the size of the system increases, i.e., the number of processes increase, the expected number of faults grows linearly with it. 
+All of these quantities are in general dependent on which faults occur and when, and how much parallelizable the algorithm is. As the size of the system increases, i.e., the number of processes increase, the expected number of faults grows linearly with it. The more parallelizable a system is, the more memory might be required but it reduces the round complexity. Round complexity is also an indication of how much of the algorithm can be executed parallely.
 
 \subsection{Previous work}
 
