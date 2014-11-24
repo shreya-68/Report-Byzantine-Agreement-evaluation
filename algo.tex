@@ -19,90 +19,91 @@ Both the algorithms Quorum and Pull-Push  make use of a string of bits as the fi
 
 
 \subsection{Algorithms}
-%\subsubsection{Algorithm Quorum}
-%This algorithm due to Ben-Or et al. \cite{BPV06} is a \textit{randomized} algorithm. The main result of the algorithm is as follows:
-%\begin{theorem}
-%For any constant $\epsilon > 0$, there exists a protocol $\mathcal{P}$ that reaches Byzantine Agreement in a synchronous full-information network tolerating $k < (1/4 - \epsilon) n$ non-adaptive Byzantine faults, and runs for expected $O(logn/\epsilon^2)$ rounds. 
-%\end{theorem}
+\subsubsection{Algorithm Quorum}
+This algorithm due to Ben-Or et al. \cite{BPV06} is a \textit{randomized} algorithm. The main result of the algorithm is as follows:
+\begin{theorem}
+For any constant $\epsilon > 0$, there exists a protocol $\mathcal{P}$ that reaches Byzantine Agreement in a synchronous full-information network tolerating $k < (1/4 - \epsilon) n$ non-adaptive Byzantine faults, and runs for expected $O(logn/\epsilon^2)$ rounds. 
+\end{theorem}
+
 %
-%%
-%
-%The algorithm makes use of a weaker version of broadcast known as \textit{Graded Broadcast} \cite{FM97}, with a designated authority called the `dealer'.
-%%\begin{itemize}
-%%\item If the dealer is good, all the processes get the same message
-%%\item Even if the dealer is bad, if some good player accepts the message, all the good processes get the same message (but they may or may not accept it)
-%%\end{itemize}
-%
-%The broadcast can be defined as follows:
-%\begin{definition}
-%A protocol $P$ is said to achieve graded broadcast if, at the beginning of the protocol the dealer $D$ holds a value $v$, and at the end of the protocol, every process $P_i$ outputs a pair $(v_i, c_i)$ where $c_i \in \{0, 1, 2\}$ denotes the confidence of the process in value $v_i$. With that, the following properties should hold:
-%\begin{enumerate}
-%\item If $D$ is honest, then $v_i = v$ and $c_i = 2$ for every honest process $P_i$. 
-%\item For any two honest processes $P_i$ and $P_j$, $\mid c_i - c_j \mid \leq 1$.
-%\item (Consistency) For any two honest processes $P_i$ and $P_j$, if $c_i > 0$ and $c_j > 0$, then $v_i = v_j$.
-%\end{enumerate}
-%\end{definition}
-%
-%The protocol is described in detail as follows:
-%%\fbox{
-%
-%\textbf{Input to the Dealer $D$:} A value $v$ 
-%
-%\textbf{Output of process $P_i$:} A pair $(v_i, c_i)$
-%\begin{description}
-%\item[Step 1] (The dealer $D$) The dealer distributes $v$ to all the processes.
-%\item[Step 2] (For every process $P_i$) Let $v_i$ denote the message received from $D$ is Step 1. Send $v_i$ to all the processes. 
-%\item[Step 3] (For every process $P_j$) Let $v_i^j$ denote the message from process $P_i$ in Step 2. If there is a value $\mu$ such that $\geq n - k$ of the $v_i^j$'s are equal to $\mu$, then send $\mu$ to all the processes. Else, send $\bot$.
-%\item[Step 4] (For every process $P_i$) Let $\mathtt{num}_\mu$ denote the number of players that sent $\mu$ to $P_i$ in Step 3.
+
+The algorithm makes use of a weaker version of broadcast known as \textit{Graded Broadcast} \cite{FM97}, with a designated authority called the `dealer'.
 %\begin{itemize}
-%\item If $\mathtt{num}_\mu \geq 2k + 1$ for some $\mu$, output $(\mu, 2)$.
-%\item If $2k \geq \mathtt{num}_\mu \geq k + 1$ for some $\mu$, output $(\mu, 1)$.
-%\item If $\mathtt{num}_\mu \leq k $ for all $\mu$, output $(\bot, 0)$.
+%\item If the dealer is good, all the processes get the same message
+%\item Even if the dealer is bad, if some good player accepts the message, all the good processes get the same message (but they may or may not accept it)
 %\end{itemize}
-%\end{description}
-%
-%\input{1algo}
-%
-%This algorithm for Byzantine Agreement proceeds in stages. It makes use of Feige's protocol \cite{Feige99} for collective coin-flipping which works as follows: In the first round, all the processes throw a ball at random into one of $O(n/log\;n)$ bins. The processes who threw their ball into the \textit{lightest bin} survive. The protocol is invoked recursively on the $O(log\;n)$ processes in the lightest bin. 
-%\input{2algo}
-%
-%The key idea is that honest processes are unbiased and the resulting bin will contain a large fraction of honest processes. After $log^* n$ invocations of the process, a leader is elected. The leader then flips a coin, and broadcasts it, which is the agreed value. The challenge is that dishonest processes will exhibit byzantine behavior when throwing their ball into one of the bins. This is overcome by using what is called a ``gradecast protocol''. It is a weaker version of a broadcast protocol.
-%
-%\input{desc_algo1}
-%
-%\subsubsection{Algorithm Pull-Push}
-%This algorithm by Braud-Santoni et al. \cite{BGH13} is the first probabilistic Byzantine Agreement algorithm whose communication and time complexities are poly-logarithmic. The authors make use of an \textit{almost everywhere to everywhere} algorithm and extend the protocol to Byzantine agreement in the complete network. This protocol uses the \textit{pull-push} communication model. The following theorem shows the main result: 
-%
-%
-%\begin{theorem}
-%For $n$ nodes in a synchronous full-information message passing model with a non-adaptive non-rushing Byzantine adversary which controls less than a $1/3 - \epsilon$ fraction of the nodes, if more than $3/4$ of the nodes know a string $g_{\mathtt{string}}$ (random enough), there is an algorithm such that with high probability:
-%\begin{itemize}
-%\item At the end of the algorithm, each correct node knows $g_{\mathtt{string}}$.
-%\item The algorithm takes $O(1)$ rounds and $\tilde{O}(n)$ messages are exchanged in total. 
-%\end{itemize}
-%\end{theorem}
-%
-%The algorithm makes use of \textit{quorums} to filter requests or messages sent by other processes. The choice of quorums each node uses is directed by both deterministically-known information (like the identity of the node), and random sources (randomly chosen initially string). Such quorums are called \textit{Samplers}. The reason for doing so is as follows:
-%\begin{itemize}
-%\item If the nodes choose deterministically who they contact, either there will be a linear number of them or few enough for the adversary to corrupt a majority. 
-%\item If uniformly random quorums are chosen, the byzantine nodes might follow the algorithm but increase the worst-case communication complexity by contacting many disjoint quorums. 
-%\end{itemize}
-%
-%Each process starts with a candidate string (the string to be agreed upon). The assumption is that more than half of the processes are both correct and have the same candidate string. The algorithm proceeds in two phases. In each of the phases, messages are only sent to selectively chosen processes or are received from selectively chosen processes by sampler functions. The detailed algorithm is given as follows:
-%
-%\input{push}
-%
-%\textbf{Push Phase}
-%
-% In the first phase, called the push phase, each process starts to \textit{diffuse} (send) its candidate string $g_{\mathtt{string}}$. Initially, node $x$'s candidate list $L_x$ contains $g_{\mathtt{string}}$. A push occurs when a node receives information about their candidate string from other nodes without asking for it. To each pair of string $s$ and node $x$, the sampler $I$ assigns a set of $O(log\;n)$ nodes. $x$ may receive pushes for $s$ from nodes in $I(x,s)$: the push Quorum of $x$ according to $s$. If more than half of the nodes of $I(x,s)$ push for $s$, $s$ is added to $x$'s candidate list $L_x$. Refer to Algorithm \ref{alg:push} for the detailed implementation.
-%
-%
-%\textbf{Pull Phase}
-%
-%In the second phase, called the pull phase, the bogus strings are discarded so that each process keeps only the correct string. This is done by each process requesting the strings it received in the push phase to be verified by some other processes. A \textit{pull} query is sent out to receive information about each string as a consequence. Checking a string $s$ involves a Poll List $J(x, r_x)$ and a Pull Quorum $H(x, s)$, where $r_x$ is taken at random. 
-%
-%\input{pull}
-%
+
+The broadcast can be defined as follows:
+\begin{definition}
+A protocol $P$ is said to achieve graded broadcast if, at the beginning of the protocol the dealer $D$ holds a value $v$, and at the end of the protocol, every process $P_i$ outputs a pair $(v_i, c_i)$ where $c_i \in \{0, 1, 2\}$ denotes the confidence of the process in value $v_i$. With that, the following properties should hold:
+\begin{enumerate}
+\item If $D$ is honest, then $v_i = v$ and $c_i = 2$ for every honest process $P_i$. 
+\item For any two honest processes $P_i$ and $P_j$, $\mid c_i - c_j \mid \leq 1$.
+\item (Consistency) For any two honest processes $P_i$ and $P_j$, if $c_i > 0$ and $c_j > 0$, then $v_i = v_j$.
+\end{enumerate}
+\end{definition}
+
+The protocol is described in detail as follows:
+%\fbox{
+
+\textbf{Input to the Dealer $D$:} A value $v$ 
+
+\textbf{Output of process $P_i$:} A pair $(v_i, c_i)$
+\begin{description}
+\item[Step 1] (The dealer $D$) The dealer distributes $v$ to all the processes.
+\item[Step 2] (For every process $P_i$) Let $v_i$ denote the message received from $D$ is Step 1. Send $v_i$ to all the processes. 
+\item[Step 3] (For every process $P_j$) Let $v_i^j$ denote the message from process $P_i$ in Step 2. If there is a value $\mu$ such that $\geq n - k$ of the $v_i^j$'s are equal to $\mu$, then send $\mu$ to all the processes. Else, send $\bot$.
+\item[Step 4] (For every process $P_i$) Let $\mathtt{num}_\mu$ denote the number of players that sent $\mu$ to $P_i$ in Step 3.
+\begin{itemize}
+\item If $\mathtt{num}_\mu \geq 2k + 1$ for some $\mu$, output $(\mu, 2)$.
+\item If $2k \geq \mathtt{num}_\mu \geq k + 1$ for some $\mu$, output $(\mu, 1)$.
+\item If $\mathtt{num}_\mu \leq k $ for all $\mu$, output $(\bot, 0)$.
+\end{itemize}
+\end{description}
+
+\input{1algo}
+
+This algorithm for Byzantine Agreement proceeds in stages. It makes use of Feige's protocol \cite{Feige99} for collective coin-flipping which works as follows: In the first round, all the processes throw a ball at random into one of $O(n/log\;n)$ bins. The processes who threw their ball into the \textit{lightest bin} survive. The protocol is invoked recursively on the $O(log\;n)$ processes in the lightest bin. 
+\input{2algo}
+
+The key idea is that honest processes are unbiased and the resulting bin will contain a large fraction of honest processes. After $log^* n$ invocations of the process, a leader is elected. The leader then flips a coin, and broadcasts it, which is the agreed value. The challenge is that dishonest processes will exhibit byzantine behavior when throwing their ball into one of the bins. This is overcome by using what is called a ``gradecast protocol''. It is a weaker version of a broadcast protocol.
+
+\input{desc_algo1}
+
+\subsubsection{Algorithm Pull-Push}
+This algorithm by Braud-Santoni et al. \cite{BGH13} is the first probabilistic Byzantine Agreement algorithm whose communication and time complexities are poly-logarithmic. The authors make use of an \textit{almost everywhere to everywhere} algorithm and extend the protocol to Byzantine agreement in the complete network. This protocol uses the \textit{pull-push} communication model. The following theorem shows the main result: 
+
+
+\begin{theorem}
+For $n$ nodes in a synchronous full-information message passing model with a non-adaptive non-rushing Byzantine adversary which controls less than a $1/3 - \epsilon$ fraction of the nodes, if more than $3/4$ of the nodes know a string $g_{\mathtt{string}}$ (random enough), there is an algorithm such that with high probability:
+\begin{itemize}
+\item At the end of the algorithm, each correct node knows $g_{\mathtt{string}}$.
+\item The algorithm takes $O(1)$ rounds and $\tilde{O}(n)$ messages are exchanged in total. 
+\end{itemize}
+\end{theorem}
+
+The algorithm makes use of \textit{quorums} to filter requests or messages sent by other processes. The choice of quorums each node uses is directed by both deterministically-known information (like the identity of the node), and random sources (randomly chosen initially string). Such quorums are called \textit{Samplers}. The reason for doing so is as follows:
+\begin{itemize}
+\item If the nodes choose deterministically who they contact, either there will be a linear number of them or few enough for the adversary to corrupt a majority. 
+\item If uniformly random quorums are chosen, the byzantine nodes might follow the algorithm but increase the worst-case communication complexity by contacting many disjoint quorums. 
+\end{itemize}
+
+Each process starts with a candidate string (the string to be agreed upon). The assumption is that more than half of the processes are both correct and have the same candidate string. The algorithm proceeds in two phases. In each of the phases, messages are only sent to selectively chosen processes or are received from selectively chosen processes by sampler functions. The detailed algorithm is given as follows:
+
+\input{push}
+
+\textbf{Push Phase}
+
+ In the first phase, called the push phase, each process starts to \textit{diffuse} (send) its candidate string $g_{\mathtt{string}}$. Initially, node $x$'s candidate list $L_x$ contains $g_{\mathtt{string}}$. A push occurs when a node receives information about their candidate string from other nodes without asking for it. To each pair of string $s$ and node $x$, the sampler $I$ assigns a set of $O(log\;n)$ nodes. $x$ may receive pushes for $s$ from nodes in $I(x,s)$: the push Quorum of $x$ according to $s$. If more than half of the nodes of $I(x,s)$ push for $s$, $s$ is added to $x$'s candidate list $L_x$. Refer to Algorithm \ref{alg:push} for the detailed implementation.
+
+
+\textbf{Pull Phase}
+
+In the second phase, called the pull phase, the bogus strings are discarded so that each process keeps only the correct string. This is done by each process requesting the strings it received in the push phase to be verified by some other processes. A \textit{pull} query is sent out to receive information about each string as a consequence. Checking a string $s$ involves a Poll List $J(x, r_x)$ and a Pull Quorum $H(x, s)$, where $r_x$ is taken at random. 
+
+\input{pull}
+
+Algorithms \ref{alg:send_pull}, \ref{alg:rout_pull} and \ref{alg:ans_pull} give a detailed implementation of the sending, routing and anwering of pull requests.
 %\begin{enumerate}
 %\item Sending Queries: Each node $x$ verifies each string $s \in L_x$ by polling a set of nodes. A random string $r_{x,s}$ is chosen to define $J(x, r_{x,s})$. A different random string is used for each candidate string $s$. Next, $x$ sends a `POLL' request to Poll List $J(x, r_{x,s})$ and a `PULL' request to Push Quorum $H(x, s)$.
 %\item Answering: 
@@ -118,16 +119,16 @@ Both the algorithms Quorum and Pull-Push  make use of a string of bits as the fi
 %\end{enumerate}
 %\item Deciding: If $x$ receives answers from a majority of nodes in $J(x, r_{x,s})$, $s$ is deemed to be the global string.
 %\end{enumerate}
-%
-%
-%Algorithms \ref{alg:send_pull}, \ref{alg:rout_pull} and \ref{alg:ans_pull} give a detailed implementation of the sending, routing and anwering of pull requests.
-%
-%\input{route}
-%
-%
-%\input{desc_algo2}
-%
-%
+
+
+
+\input{desc_algo2}
+
+\input{route}
+
+
+
+
 %\subsubsection{Algorithm EIG}
 %The first algorithm to make use of an Exponential Information Gathering (EIG) protocol was given by Bar-Noy et al. \cite{Bar-NoyD91}. The algorithm was shown to have a lower bound of $k + 1$ rounds for time complexity, where $k$ is the number of faulty processes such that $k < n/3$ \cite{FischerLP83}. In 1998, Garay and Moses \cite{GarayM98}, with modifications to the two phase protocol of \cite{Bar-NoyD91} using the EIG data structure, improved the communication complexity further to polynomial time. \\
 %% The communication complexity was exponential in the number of faulty processes $f$ which was later improved to $\Omega(n^2)$ in \cite{DolevR85}.
