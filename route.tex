@@ -1,0 +1,33 @@
+
+
+        \begin{minipage}[H]{0.80\columnwidth}
+        \begin{Ualgorithm}
+         \caption{Routing Pull Request}%
+    \footnotesize
+               \label{alg:rout_pull}%
+      %\SetAlgoLined
+        Upon event: $\mathtt{recv}(PULL, s, r_{x, s}, H_s) \Leftarrow x$\;
+        \Indp 
+            \If{$g_{string} == s$ and $P_i$ in $H_s$}{
+                $J_{x,r_{x,s}} \gets$ getPollList($r_{x, s}, x$)\;
+                \ForEach{$w$ in $J_{x,r_{x,s}}$}{
+                    $H_{w,s} \gets$ getPullQuorum($s$, $w$)\;
+                    send$(ROUTE, x, s, r_{x, s}, w) \Rightarrow H_{w,s}$\;
+                }
+            }
+        \Indm Upon event: $\mathtt{recv}(ROUTE, x, s, r_{x,s}, w) \Leftarrow P_j$\;
+        \Indp 
+            $H_{x,s} \gets$ getPullQuorum($s$, $x$)\;
+            $J_{x,r_{x,s}} \gets$ getPollList($r_{x, s}, x$)\;
+            \If{$g_{string} == s$ and $P_j$ in $H_{x,s}$ and $w$ in $J_{x,r_{x,s}}$}{
+                $\mathtt{fw\_count}_{s,x}++$\;
+                \If{$\mathtt{fw\_count}_{s,x} > \frac{1}{2}|H_{x,s}|$}{
+                    send$(FORWARD, x, s, r_{x, s}) \Rightarrow w$\;
+                    $\mathtt{fw\_count}_{s,x} \gets \infty$\;
+                }
+            }
+
+
+    \end{Ualgorithm}%
+  \end{minipage}%
+

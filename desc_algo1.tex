@@ -1,0 +1,38 @@
+
+%\textbf{Stage 1: Form $\frac{n}{alogn}$ Committees}\\
+
+
+%\textbf{Stage 2: Agree on smallest committee}\\
+
+%    \fbox{
+%\begin{multicols}{2}
+
+%\newcommand{\part}[1]{%
+
+%\textbf{Stage 3: Final Decision}\\
+%    \fbox{
+        \begin{minipage}[h]{0.90\columnwidth}
+            \begin{algorithm}[H]
+    %\footnotesize
+         \caption{Stage 3: Final Decision}%
+               \label{alg:stage3}%
+      %\SetAlgoLined
+               \KwIn{Smallest committee chosen by all processes $C_{small}$}
+        \KwOut{Final decision value of all processes}
+
+    \tcc{$L_i$ is the ID of leader of committee $C_{small}$}
+    $L_i \gets$ leader\_election$(C_{small})$\;
+    \eIf{$L_i == P_i$}{
+        val = flip\_coin()\;
+        broadcast(val)\;
+    }{
+        val = recv()\;
+    }
+    \Return{val}
+
+
+
+    \end{algorithm}%
+  \end{minipage}%
+%  }
+

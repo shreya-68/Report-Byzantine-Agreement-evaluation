@@ -1,0 +1,30 @@
+
+
+        \begin{minipage}[H]{0.80\columnwidth}
+        \begin{Ualgorithm}
+         \caption{Push phase}%
+               \label{alg:push}%
+      %\SetAlgoLined
+               \KwIn{Process $P_i$ with a random string $g_{string}$, a list of all strings $C_{string}$}
+        \KwOut{Each node creates a candidate strings list $L_{P_i}$}
+        
+        $g_{string} \gets$ createRandString()\;
+
+        broadcast$(g_{string})$\;
+
+        $L_{P_i} \gets g_{string}$\;
+
+        
+        \ForEach{ $str$ in $C_{string}$}{
+
+            $I_s \gets$ getPushQuorum($\mathtt{str}, P_i$)\;
+            $\mathtt{num} \gets recv(I_s)$\;
+            \If{$\mathtt{num} > len(I_s)$}{
+                $L_{P_i} \gets L_{P_i} \cup s$\;
+            }
+
+        }
+
+
+    \end{Ualgorithm}%
+  \end{minipage}%

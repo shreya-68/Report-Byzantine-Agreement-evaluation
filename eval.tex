@@ -61,12 +61,12 @@ For the Pull-Push algorithm, as the network size increases the bit complexity di
  \label{fig:pull_push}
 \end{figure}
 
-%\begin{figure}[h]
-% \centering
-%\includegraphics[scale=0.55]{quorum}
-%\caption{Consensus results for Quorum algorithm}
-% \label{fig:quorum}
-%\end{figure}
+\begin{figure}[h]
+ \centering
+\includegraphics[scale=0.4]{quorum}
+\caption{Consensus results for Quorum algorithm}
+ \label{fig:quorum}
+\end{figure}
 
 \subsubsection{Comparison}
 As can be seen from Fig. \ref{fig:comp}, for large networks $n > 64$, on varying the ratio of faults to the number of processes, i.e., $f/n$ lies in the range $[0, 1/3)$ for algorithms EIG and Pull-Push and in the range $[0, 1/4)$ for algorithm Quorum, the algorithm Pull-Push performs much better, than the other algorithms. For this algorithm, the change in the ratio does not affect the complexity much, whereas for algorithm EIG we can see a slight increase. This is due to byzantine nodes trying to send $O(n^2)$ bits to every node in every round and good nodes having to send the complete byzantine list in every round. We modify this protocol a little and require that instead of sending the complete byzantine list every time, only the changes to this list be sent in every round. This would overall reduce communication bits as good nodes would send a bit for every node only if it was newly added to the byzantine list at the end of the previous round. This modified version of the algorithm performs much better and even though the communication bits are high for small fault ratios it reduces the communication complexity by $O(n)$. 
@@ -79,9 +79,9 @@ As can be seen from Fig. \ref{fig:comp}, for large networks $n > 64$, on varying
 
 \begin{figure}[h]
  \centering
-\includegraphics[scale=0.4]{Fault33}
+\includegraphics[scale=0.4]{Fault25}
 \caption{ Comparison for variable number of faults in each algorithm}
- \label{fig:fault33}
+ \label{fig:fault25}
 \end{figure}
 
 \begin{figure}[h]

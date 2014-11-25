@@ -1,0 +1,32 @@
+
+        \begin{minipage}[H]{0.80\columnwidth}
+        \begin{Ualgorithm}
+         \caption{Sending Pull Request}%
+               \label{alg:send_pull}%
+      %\SetAlgoLined
+               \KwIn{$L_{P_i}$, list of candidates for node $P_i$}
+        \KwOut{String agreed upon}
+        
+        
+        \ForEach{ $s$ in $L_{P_i}$}{
+            $r_{P_i, s} \gets$ generateRand()\;
+            $J_{r,s} \gets$ getPollList($r_{P_i, s}, P_i$)\;
+            $H_s \gets$ getPullQuorum($s$, $P_i$)\;
+            send$(POLL, s, r_{P_i, s}, J_{r,s})$\;
+            send$(PULL, s, r_{P_i, s}, H_s)$\;
+
+            Upon event: recv$(ANSWER,s,r)  \Leftarrow w$\;
+            \Indp 
+                \If{$w$ in $J_{r,s}$}{
+                    $\mathtt{count}_s ++$\;
+                    \If{$\mathtt{count}_s > \frac{1}{2}|J_{r,s}|$}{
+                        has\_decided $\gets$ true\;
+                        $\mathtt{final}_s \gets s$\;
+                        \Return{$s$}\;
+                    }
+                }
+        }
+
+
+    \end{Ualgorithm}%
+  \end{minipage}%

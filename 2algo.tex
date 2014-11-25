@@ -1,0 +1,65 @@
+
+  \begin{minipage}[h]{0.90\columnwidth}%
+            \begin{algorithm}[H]%
+    %\footnotesize%
+         \caption{Stage 2: Agree on smallest committee}%
+               \label{alg:stage2}%
+        \KwIn{View of all committees formed by all the processes}
+        \KwOut{Smallest Committee}
+
+
+        \ForEach{ $C_i$ in $C$}{
+            thread\_create$(t_k, \mathtt{decide}(C_i))$\;
+        }
+        
+        decide$(C_i)$ \;
+            \Indp $S \gets \mathtt{subsets}(\frac{3}{4}a\mathtt{log n}, P)$\;
+
+            \ForEach{ $S_j$ in $S$}{
+
+                \ForEach{$P_k$ in $S_j$}{
+                    $\mathtt{\bar{view}}_k(C_i) \gets \mathtt{\bar{obtain\_view}}(P_k, C_i$) \;
+                    $\mathtt{\bar{view}}_{S_j}(C_i) \gets \mathtt{\bar{view}}_{S_j}(C_i) \cap \mathtt{view}_k(C_i)$\;
+                }
+                \eIf{$\mid \mathtt{\bar{view}}_{S_j}(C_i) \mid > \mathtt{alog n}$}{
+                    $\mathtt{disq}_{P_i, S_j}(C_i) = 1$\;
+                }{
+                    $\mathtt{disq}_{P_i, S_j}(C_i) = 0$\;
+                }
+                \If{$\mathtt{disq}_{P_i, S_j}(C_i) == 0$}{
+                    \ForEach{$P_k$ in $S_j$}{
+                        $\mathtt{view}_k(C_i) \gets \mathtt{obtain\_view}(P_k, C_i$) \;
+                        $\mathtt{composition}_{S_j}(C_i) \gets \mathtt{composition}_{S_j}(C_i) \cap \mathtt{view}_k(C_i)$\;
+                    }
+                }
+                broadcast$(S_j, C_i, \mathtt{disq}_{P_i, S_j}(C_i), $ \\
+                $\hfill \mathtt{composition}_{S_j}(C_i))$\;
+            }%
+
+                $(S_j, C_i, \mathtt{disq}, \mathtt{comp}) \gets \mathtt{recv}(S_j')$\;
+                \tcc{$S_j'$ is the ID from who the tuple is received}
+
+                \ForAll{$(S_j, C_i, 1, *)$}{
+                    \If{$\mid S_j' \mid \geq \frac{1}{2}\mathtt{alogn}$ and $S_j' \subseteq S_j \subseteq \mathtt{view}_i(C_i)$}{
+                        $\mathtt{disq}_{P_i}(C_i) = 1$\;
+                    }
+                }
+                \ForEach{$S_j$ in $\mathtt{view}_i(C_i)$}{
+                    \ForAll{$S_j', (S_j, C_i, 0, D) $}{
+                        \If{$ S_j' \subseteq S_j$ and $\mid S_j' \mid \geq \frac{1}{2}\mathtt{alogn}$}{
+                            $\mathtt{composition}_{S_j}(C_i) \gets D$\;
+                        }
+                        {
+                            $\mathtt{composition}_{S_j}(C_i) \gets \bot$\;
+                        }
+                    }
+                    \ForAll{$S_j$}{
+                            $\mathtt{composition}(C_i) \gets$ largest$(\mathtt{composition}_{S_j}(C_i))$\;
+                    }
+                }
+            \Indm \ForAll{$C_i$}{
+                 $C_{small} \gets$ Choose\_smallest($\mathtt{composition}(C_i)$)\;
+            }
+    \end{algorithm}%
+  \end{minipage}%
+%}

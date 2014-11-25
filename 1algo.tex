@@ -1,0 +1,43 @@
+
+        \begin{minipage}[h]{0.90\columnwidth}
+        %\footnotesize
+        \begin{algorithm}[H]
+         \caption{Stage 1: Form Committees}%
+               \label{alg:stage1}%
+      %\SetAlgoLined
+               \KwIn{Process $P_i$ with a random number $B_i$}
+        \KwOut{View of all committees formed by all the processes}
+
+        $B_i \gets rand([1, \dots, \frac{n}{alogn}])$\;
+
+        $gradecast(B_i)$\;
+
+        
+        \ForEach{ $P_j$ in $P$}{
+
+        $(v_i^j, c_i^j) \gets recv(P_j)$\;
+
+        }
+
+        \ForEach{ $C_k$ in $C$}{
+
+            \ForEach{$P_j$ in $P$}{
+                \If{$v_i^j == C_k$ and $c_i^j == 2$}{
+
+                    $\mathtt{view}_i(C_k) \gets \mathtt{view}_i(C_k) \cup P_j$\;
+                }
+            }
+        }
+        \ForEach{ $C_k$ in $C$}{
+
+            \ForEach{$P_j$ in $P$} {
+
+                \uIf{$v_i^j == C_k$ and $c_i^j > 2$}{
+
+                    $\mathtt{\bar{view}}_i(C_k) \gets \mathtt{\bar{view}}_i(C_k) \cup P_j$\;
+                }
+            }
+        }
+
+    \end{algorithm}%
+  \end{minipage}%
