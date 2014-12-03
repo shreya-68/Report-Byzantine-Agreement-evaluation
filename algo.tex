@@ -1,16 +1,16 @@
 ﻿\section{Algorithms}
 \label{sec:algos}
 
-%\begin{table*}[t]
-%    \begin{tabular}{p{2cm}llllllp{2.5cm}p{2cm}}
-%\hline
-%\textbf{Algorithm} & \textbf{Year} & \textbf{Type} &\textbf{n} & \textbf{Rounds} & \textbf{Bit Complexity } &\textbf{Decision value} & \textbf{Communicating nodes}& \textbf{Remarks} \\ \hline
-%Ben-Or, Pavlov, Vaikuntanathan \cite{BPV06} & 2006 & Randomized & $4k + 1$ & $O(logn)$ & $n^{O(logn)}$      &String of $O(logn)$ bits &All-to-all communication and within quorums of size $O(logn)$   & Everywhere BA     \\
-%          Braud-Santoni et. al \cite{BGH13} & 2014 & Randomized & $3k + 1$ & Constant & $\tilde{o}(n)$      &String of $O(logn)$ bits &With samplers of size $O(logn)$  & Almost everywhere to everywhere     \\
-% Kowalski and Mostefaoui \cite{MHR14} & 2013   & Deterministic & $3k + 1$     & $k + 1$               &Single bit               & $O(n^3logn)$ &All-to-all communication & Uses EIG data structure\\ \hline
-%%
-%\end{tabular}
-%\end{table*}
+\begin{table*}[t]
+    \begin{tabular}{p{2cm}llllllp{2.5cm}p{2cm}}
+\hline
+\textbf{Algorithm} & \textbf{Year} & \textbf{Type} &\textbf{n} & \textbf{Rounds} & \textbf{Bit Complexity } &\textbf{Decision value} & \textbf{Communicating nodes}& \textbf{Remarks} \\ \hline
+Ben-Or, Pavlov, Vaikuntanathan \cite{BPV06} & 2006 & Randomized & $4k + 1$ & $O(logn)$ & $n^{O(logn)}$      &String of $O(logn)$ bits &All-to-all communication and within quorums of size $O(logn)$   & Everywhere BA     \\
+          Braud-Santoni et. al \cite{BGH13} & 2014 & Randomized & $3k + 1$ & Constant & $\tilde{o}(n)$      &String of $O(logn)$ bits &With samplers of size $O(logn)$  & Almost everywhere to everywhere     \\
+ Kowalski and Mostefaoui \cite{MHR14} & 2013   & Deterministic & $3k + 1$     & $k + 1$               &Single bit               & $O(n^3logn)$ &All-to-all communication & Uses EIG data structure\\ \hline
+%
+\end{tabular}
+\end{table*}
 
 %TODO: Define the model: Network, Adversary, synch. Defn of basic byzantine agreement and any other notations.
 
@@ -70,6 +70,7 @@ This algorithm for Byzantine Agreement proceeds in stages. It makes use of Feige
 
 The key idea is that honest processes are unbiased and the resulting bin will contain a large fraction of honest processes. After $log^* n$ invocations of the process, a leader is elected. The leader then flips a coin, and broadcasts it, which is the agreed value. The challenge is that dishonest processes will exhibit byzantine behavior when throwing their ball into one of the bins. This is overcome by using the \textit{gradecast} protocol described earlier. Algorithm \ref{alg:stage3} describes the leader election procedure.
 
+
 \input{desc_algo1}
 
 
@@ -102,7 +103,8 @@ Each process starts with a candidate string (the string to be agreed upon). The 
 
 \input{pull}
 
-\input{desc_algo2}
+\input{route}
+
 
 \textbf{Pull Phase}
 
@@ -127,9 +129,9 @@ Algorithms \ref{alg:send_pull}, \ref{alg:rout_pull} and \ref{alg:ans_pull} give 
 %\end{enumerate}
 
 
+\input{desc_algo2}
 
 
-\input{route}
 
 
 \subsubsection{Algorithm EIG}
