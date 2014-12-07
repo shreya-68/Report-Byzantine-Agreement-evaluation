@@ -18,8 +18,12 @@
         
         \ForEach{ $str$ in $C_{string}$}{
 
-            $I_s \gets$ getPushQuorum($\mathtt{str}, P_i$)\;
-            $\mathtt{num} \gets recv(I_s)$\;
+            $I_{str} \gets$ getPushQuorum($\mathtt{str}, P_i$)\;
+            \ForEach{$p$ in $I_{str}$}{
+                \If{$recv(I_s) == str$}{
+                    $num++$\;
+                }
+            }
             \If{$\mathtt{num} > len(I_s)$}{
                 $L_{P_i} \gets L_{P_i} \cup s$\;
             }

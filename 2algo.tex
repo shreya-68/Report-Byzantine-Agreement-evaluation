@@ -35,11 +35,10 @@
                         $\mathtt{composition}_{S_j}(C_i) \gets \mathtt{composition}_{S_j}(C_i) \cap \mathtt{view}_k(C_i)$\;
                     }
                 }
-                broadcast$(S_j, C_i, \mathtt{disq}_{P_i, S_j}(C_i), $ \\
-                $\hfill \mathtt{composition}_{S_j}(C_i))$\;
+                broadcast$(S_j, C_i, \mathtt{disq}_{P_i, S_j}(C_i), \hfill \mathtt{composition}_{S_j}(C_i))$\;
 
+                \tcc{The tuple is received from ID $S_j'$}
                 $(S_j, C_i, \mathtt{disq}, \mathtt{comp}) \gets \mathtt{recv}(S_j')$\;
-                \tcc{$S_j'$ is the ID from who the tuple is received}
 
                 \ForAll{$(S_j, C_i, 1, *)$}{
                     \If{$\mid S_j' \mid \geq \frac{1}{2}\mathtt{alogn}$ and $S_j' \subseteq S_j \subseteq \mathtt{view}_i(C_i)$}{
