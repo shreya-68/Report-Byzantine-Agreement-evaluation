@@ -1,21 +1,22 @@
 ﻿\section{Algorithms}
 \label{sec:algos}
 
-\begin{table*}[ht]
+\begin{table*}[t]
     \vspace{-5mm}
     \caption{}
     \vspace{-2mm}
     \begin{tabular}{p{2cm}llllllp{2.5cm}p{2cm}}
 \hline
 \textbf{Algorithm} & \textbf{Year} & \textbf{Type} &\textbf{n} & \textbf{Rounds} & \textbf{Bit Complexity } &\textbf{Decision value} & \textbf{Communicating nodes}& \textbf{Remarks} \\ \hline
-Ben-Or, Pavlov, Vaikuntanathan \cite{BPV06} & 2006 & Randomized & $4k + 1$ & $O(logn)$ & $n^{O(logn)}$      &String of $O(logn)$ bits &All-to-all communication and within quorums of size $O(logn)$   & Everywhere BA     \\
+Ben-Or, Pavlov, Vaikuntanathan \cite{BPV06} & 2006 & Randomized & $4k + 1$ & $O(logn)$ & $n^{O(logn)}$      &String of $O(logn)$ bits &All-to-all communication and within quorums of size $O(logn)$   & Everywhere byzantine agreement     \\
           Braud-Santoni et al. \cite{BGH13} & 2014 & Randomized & $3k + 1$ & $O(\frac{logn}{log\; log n})$ & $\tilde{o}(n)$      &String of $O(logn)$ bits &With samplers of size $O(logn)$  & Almost-everywhere to everywhere     \\
- Kowalski and Mostefaoui \cite{MHR14} & 2013   & Deterministic & $3k + 1$     & $k + 1$                     & $O(n^3logn)$ &Single bit  &All-to-all communication & Uses EIG data structure\\ \hline
+ Kowalski and Mostefaoui \cite{KM13} & 2013   & Deterministic & $3k + 1$     & $k + 1$                     & $O(n^3logn)$ &Single bit  &All-to-all communication & Uses EIG data structure\\ \hline
 %
 \end{tabular}
 \vspace{-2mm}
 \end{table*}
-Here, we will describe the model of the network, adversarial conditions and the algorithms of \cite{BPV06}, \cite{BGH13} and \cite{MHR14}, i.e., algorithm \textit{Quorum}, \textit{Pull-Push} and \textit{EIG}, respectively, that are to be evaluated under these conditions. Table 1 compares some properties of these algorithms.
+
+Here, we will describe the model of the network, adversarial conditions and the algorithms of \cite{BPV06}, \cite{BGH13} and \cite{KM13}, i.e., algorithm \textit{Quorum}, \textit{Pull-Push} and \textit{EIG}, respectively, that are to be evaluated under these conditions. Table 1 compares some properties of these algorithms.
 
 
 \subsection{Model}
@@ -28,14 +29,14 @@ The adversary controls a fraction of the processes - a maximum of $k$ processes,
 Both the algorithms \textit{Quorum} and \textit{Pull-Push}  make use of a string of bits as the final decision. However, algorithm \textit{EIG} uses a single bit as input and output decision value.
 
 
-\subsection{Algorithms\protect\footnote{The algorithms presented here have been reproduced, paraphrased, condensed from works of \cite{BPV06}, \cite{KM13} and \cite{BGH13}.}}
+\subsection{Algorithms\protect\footnote{The algorithms and protocols presented here have been reproduced, paraphrased, condensed from works of \cite{BPV06}, \cite{KM13} and \cite{BGH13}.}}
 
 \subsubsection{Algorithm Quorum\cite{BPV06}}
 The main result of this algorithm, due to Ben-Or et al., is as follows:
 \begin{theorem}
 For any constant $\epsilon > 0$, there exists a protocol $\mathcal{P}$ that reaches Byzantine Agreement in a synchronous full-information network tolerating $k < (1/4 - \epsilon) n$ non-adaptive Byzantine faults, and runs for expected $O(logn/\epsilon^2)$ rounds. 
 \end{theorem}
-The algorithm makes use of a weaker version of broadcast known as \textit{Graded Broadcast} \cite{FM97}, with a designated authority called the `dealer'.
+The algorithm makes use of a weaker version of broadcast known as \textit{Graded Broadcast} or \textit{Gradecast} \cite{FM97}, with a designated authority called the `dealer'.
 %\begin{itemize}
 %\item If the dealer is good, all the processes get the same message
 %\item Even if the dealer is bad, if some good player accepts the message, all the good processes get the same message (but they may or may not accept it)
@@ -64,7 +65,7 @@ The protocol is described in detail as follows: \\
 
 \input{1algo}
 
-This algorithm for Byzantine Agreement proceeds in stages. It makes use of Feige's protocol \cite{Feige99} for collective coin-flipping which works as follows: In the first round, all the processes throw a ball at random into one of $O(n/log\;n)$ bins. The processes which throw their ball into the \textit{lightest bin} survive. The protocol is invoked recursively on the $O(log\;n)$ processes in the lightest bin. Algorithm \ref{alg:stage1} and \ref{alg:stage2} detail this procedure of agreeing on a small committee.
+This algorithm for Byzantine Agreement proceeds in stages. It makes use of Feige's protocol \cite{Feige99} for collective coin-flipping which works as follows: in the first round, all the processes throw a ball at random into one of $O(n/log\;n)$ bins. The processes which throw their ball into the \textit{lightest bin} survive. The protocol is invoked recursively on the $O(log\;n)$ processes in the lightest bin. Algorithm \ref{alg:stage1} and \ref{alg:stage2} detail this procedure of agreeing on a small committee.
 
 \input{2algo}
 
@@ -78,17 +79,17 @@ This algorithm by Braud-Santoni et al. \cite{BGH13} is the first probabilistic B
 
 
 \begin{theorem}
-For $n$ nodes in an asynchronous full-information message passing model with a non-adaptive Byzantine adversary which controls less than a $1/3 - \epsilon$ fraction of the nodes, if more than $3/4$ of the nodes know a string $g_{\mathtt{string}}$ (random enough), there is an algorithm such that with high probability:
+For $n$ processes in an asynchronous full-information message passing model with a non-adaptive Byzantine adversary which controls less than a $1/3 - \epsilon$ fraction of the processes, if more than $3/4$ of the processes know a string $g_{\mathtt{string}}$ (random enough), there is an algorithm such that with high probability:
 \begin{itemize}
-\item At the end of the algorithm, each correct node knows $g_{\mathtt{string}}$.
+\item At the end of the algorithm, each correct process knows $g_{\mathtt{string}}$.
 \item The algorithm takes $O(\frac{logn}{log \; logn})$ rounds and $\tilde{O}(n)$ messages are exchanged in total. 
 \end{itemize}
 \end{theorem}
 
-The algorithm makes use of \textit{quorums} to filter requests or messages sent by other processes. The choice of quorums each node uses is directed by both deterministically-known information (like the identity of the node), and random sources (randomly chosen initially string). Such quorums are called \textit{Samplers}. The reason for doing so is as follows:
+The algorithm makes use of \textit{quorums} to filter requests or messages sent by other processes. The choice of quorums each process uses is directed by both deterministically-known information (like the identity of the process), and random sources (randomly chosen initially string). Such quorums are called \textit{Samplers}. The reason for doing so is as follows:
 \begin{itemize}
-\item If the nodes choose deterministically who they contact, either there will be a linear number of them or few enough for the adversary to corrupt a majority. 
-\item If uniformly random quorums are chosen, the byzantine nodes might follow the algorithm but increase the worst-case communication complexity by contacting many disjoint quorums. 
+\item If the processes choose deterministically who they contact, either there will be a linear number of them or few enough for the adversary to corrupt a majority. 
+\item If uniformly random quorums are chosen, the byzantine processes might follow the algorithm but increase the worst-case communication complexity by contacting many disjoint quorums. 
 \end{itemize}
 
 Each process starts with a candidate string (the string to be agreed upon). The assumption is that more than half of the processes are both correct and have the same candidate string. The algorithm proceeds in two phases. In each of the phases, messages are sent only to selectively chosen processes or are received from selectively chosen processes by sampler functions. The detailed algorithm is given as follows:
@@ -96,7 +97,7 @@ Each process starts with a candidate string (the string to be agreed upon). The 
 
 \textbf{Push Phase}
 
- In the first phase, each process starts to \textit{diffuse} (send) its candidate string $g_{\mathtt{string}}$. A push occurs when a node receives information about their candidate string from other nodes without asking for it. To each pair of string $s$ and node $x$, the push quorum $I(x,s)$ assigns a set of $O(log\;n)$ nodes. $x$ may receive pushes for $s$ from nodes in $I(x,s)$ only. If more than half of the nodes of $I(x,s)$ push for $s$, $s$ is added to $x$'s candidate list $L_x$. Refer to Algorithm \ref{alg:push} for the detailed implementation.
+ In the first phase, each process starts to \textit{diffuse} (send) its candidate string $g_{\mathtt{string}}$. A push occurs when a process receives information about their candidate string from other processes without asking for it. To each pair of string $s$ and process $x$, the push quorum $I(x,s)$ assigns a set of $O(log\;n)$ processes. $x$ may receive pushes for $s$ from processes in $I(x,s)$ only. If more than half of the processes of $I(x,s)$ push for $s$, $s$ is added to $x$'s candidate list $L_x$. Refer to Algorithm \ref{alg:push} for the detailed implementation.
 
 \input{push}
 
@@ -107,7 +108,7 @@ Each process starts with a candidate string (the string to be agreed upon). The 
 
 \textbf{Pull Phase}
 
-In the second phase, called the pull phase, the bogus strings are discarded so that each process keeps only the correct string. This is done by each process requesting the strings it received in the push phase to be verified by some other processes. A \textit{pull} query is sent out to receive information about each string as a consequence. Checking a string $s$ involves a Poll List $J(x, r_x)$ and a Pull Quorum $H(x, s)$, where $r_x$ is taken at random. 
+In the second phase, called the pull phase, the bogus strings are discarded so that each process keeps only the correct string. This is done by each process requesting the strings it received in the push phase to be verified by some other processes. A \textit{pull} query is sent out to receive information about each string as a consequence. Checking a string $s$ involves a Poll List $J(x, r_x)$ and a Pull Quorum $H(x, s)$, where $r_x$ is chosen at random. 
 
 
 Algorithms \ref{alg:send_pull}, \ref{alg:rout_pull} and \ref{alg:ans_pull} give a detailed implementation of the sending, routing and answering of pull requests.
