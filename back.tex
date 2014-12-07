@@ -23,12 +23,12 @@ There is a $k$-fault tolerant synchronous protocol to solve the byzantine agreem
 
 The practicality of agreement protocols depends heavily on their computational complexity. Theoretically, when talking about complexity measures of algorithms for distributed consensus, one generally uses the following two metrics:
 \begin{itemize}
-\item \textit{Round} complexity, that is the number of rounds of message exchange before all the non-faulty processes decide.
-\item \textit{Communication} complexity, that is the total number of messages sent per process or the total number of bits sent per process.
+\item \textit{Round} complexity - the number of rounds of message exchange before all the non-faulty processes decide.
+\item \textit{Communication} complexity - the total number of messages sent per process or the total number of bits sent per process.
 \end{itemize}
 For our purposes, we will also consider the following metric: 
 \begin{itemize}
-\item \textit{Latency}, is the overall CPU time utilization from start till all the non-faulty processes decide.
+\item \textit{Latency} - the overall CPU time utilization or elapsed real time from start till all the non-faulty processes decide.
 %\item \textit{Memory} comsumption, is the memory requirement for the execution of an alorithm for a configuration and depends mainly upon the data structures used for storing of values.
 \end{itemize}
 All of these quantities are in general dependent on which faults occur and when, and how parallel the algorithm is. As the size of the system increases, i.e., the number of processes increase, the expected number of faults grows linearly with it. Also, for example, a highly parallel system might require more memory but reduces the round complexity. Round complexity is also an indication of how much of the algorithm can be executed in parallel.
@@ -40,7 +40,7 @@ Fischer and Lynch \cite{Fischer81alower} proved that $k + 1$ is the round comple
 
 \subsubsection{Randomized Solutions}
 Probabilistic solutions were proposed to circumvent the lower bounds on round and message complexity imposed by deterministic settings. They used the idea of a common coin, which was seen as `sufficiently random' by `sufficiently many random' processes. 
-In the asynchronous setting, using randomized algorithms, Ben-Or \cite{Ben-Or83} showed that if $k < n/5$, then consensus is achievable with probability $1$. Rabin \cite{Rabin83} showed constant expected round complexity if $k < n/4$. Greatly improved results have been shown in \cite{PCR14, KKKSS08, MHR14} for non-adaptive adversary and in \cite{KS13,AAKS14} for an adaptive adversary. Assuming that communication channels are \textit{private} between every pair of processes, the algorithm proposed in \cite{PR10} shows constant expected round complexity and $\tilde{O}(n^2)$ message complexity. These bounds are also applicable to the asynchronous setting. In \cite{HKK08}, the authors proved an $\Omega(\sqrt[3]{n})$ lower bound on both message complexity and round complexities for synchronous systems, under some restrictive assumptions.
+In the asynchronous setting, using randomized algorithms, Ben-Or \cite{Ben-Or83} showed that if $k < n/5$, then consensus is achievable with probability $1$. Rabin \cite{Rabin83} showed constant expected round complexity if $k < n/4$. Greatly improved results have been shown in \cite{PCR14, KKKSS08, MHR14} for non-adaptive adversary and in \cite{KS13,AAKS14} for an adaptive adversary. Assuming that communication channels are \textit{private} between every pair of processes, the algorithm proposed in \cite{PR10} shows constant expected round complexity and $\tilde{O}(n^2)$ message complexity. These bounds are also applicable to the asynchronous setting. In \cite{HKK08}, the authors proved an $\Omega(\sqrt[3]{n})$ lower bound on both message complexity and round complexity for synchronous systems, under some restrictive assumptions.
 
 \subsubsection{Almost-everywhere Solutions}
 The almost-everywhere byzantine agreement problem, was introduced by Dwork et al. in \cite{DPPU88}. It is a relaxed version of the byzantine agreement problem and requires all but an $O(log^{-1}n)$ fraction of the processes to agree on a common output. For the algorithm in \cite{KSSV06}, the round and message complexities are shown to be poly-logarithmic in $n$. Construction of byzantine agreement from almost-everywhere byzantine agreement, called almost-everywhere reduction, was proposed in \cite{KS09,KLST11}, using $\tilde{O}(\sqrt{n})$ bits per process and poly-logarithmic number of rounds. 
