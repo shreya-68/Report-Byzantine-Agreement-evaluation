@@ -20,34 +20,33 @@ The input into the system is size of the network, i.e., total number of processe
 The output is the number of rounds carried out, latency in terms of CPU time utilization and elapsed real time, number of messages/bits sent per process, and the final decision value of each process. 
 
 \subsection{Testing parameters}
-For testing the three algorithms, the number of processes $(n)$ lies in the range $4$ to $64$ on a cluster of $1$ to $16$ machines. The number of faults $(f)$ lies in the range $[0, n/3)$ for algorithms \textit{Pull-Push} and \textit{EIG}, and in the range $[0, n/4)$ for algorithm \textit{Quorum}. These ranges have been considered since the algorithms have been shown to be correct in only these respective ranges.
+For testing the three algorithms, the number of processes $(n)$ lies in the range $4$ to $64$ on a cluster of $1$ to $16$ machines. The number of faults $(f)$ lies in the range $[0, n/3)$ for algorithms \textit{Pull-Push} and \textit{EIG}, and in the range $[0, n/4)$ for algorithm \textit{Quorum}. The algorithms have been shown to be correct in these respective ranges only.
 
 \subsection{Authentication of processes}
 It was assumed that the channels are authenticated and each receiving entity knows the identity of the sender. The communication primitives provided by the MPI library implicitly provide this functionality and hence, a byzantine process cannot spoof their identity or hide it.
 
 \subsection{Connection}
-Each process in the peer-to-peer network had full knowledge about the network connection of other processes, i.e., the IP address and port number of the hosts it was connected to. Using the MPI library this is done by giving a unique ID to each process from $[0, n)$. The MPI point-to-point operations were used for sending and receiving messages between (any) two processes. This behaves like a TCP connection and was used for reliable transfer of messages between hosts. It also guarantees order between messages but does not guarantee fairness. The implementation does not make use of any shared resources.
+Each process in the peer-to-peer network had full knowledge about the network connection of other processes, i.e., the IP address and port number of the hosts it was connected to. Using the MPI library this is done by giving a unique ID to each process from $[0, n)$. The MPI point-to-point operations were used for sending and receiving messages between (any) two processes. This behaves like a TCP connection and was used for reliable transfer of messages between hosts. It also guarantees order between messages but does not guarantee fairness.% The implementation does not make use of any shared resources.
+
+\subsection{Synchronization}
+To implement a synchronous model of communication, communicators have been used. They are essentially a group of processes. \texttt{MPI\_Barrier}, a synchronization operation provided by the MPI library, allows one to specify a group to wait on. A process blocks on this call until all processes in the specified group reach this call. To keep all the processes in the network synchronized after each phase, this routine is used whose group is set to the active processes in the network.
 
 \subsection{Parallelization}
-To allow programs to execute parts of the protocol that are independent of each other in parallel, MPI thread level support has been used. To further speedup the runtime, non-blocking calls have been used in some places where, for example, the execution of next few instructions does not depend on the completion of a send call. The MPI implementation creates a system buffer to typically hold data in transit. This is useful when a process wants to receive some messages sent to it by multiple other processes at a later time. This helps to improve performance to an extent since it allows for send-receive operations to be asynchronous. Nevertheless, it is a finite resource and should be used carefully otherwise it can lead to loss of messages. 
+To allow programs to execute parts of the protocol that are independent of each other in parallel, MPI thread level support has been used. To further improve performance, non-blocking calls have been used in some places where, for example, the execution of next few instructions does not depend on the completion of a send call. The MPI implementation creates a system buffer to typically hold data in transit. This is useful when a process wants to receive some messages sent to it by multiple other processes at a later time. This improved performance by allowing send-receive operations to be asynchronous. The non-blocking calls were used such that execution within a round became asynchronous and not between rounds to ensure correctness. To ensure that messages are not lost by the overflow of a system buffer, each message was given a unique tag number which corresponded to a unique system buffer.
+
 
 \subsection{Byzantine behaviors}
 \label{sec:behavior}
 The byzantine behaviors that a process can display are the following:
 \begin{itemize}
-    \item Crash failure: Processes may fail by stopping. Any good process that fails to send messages or aborts its execution is considered byzantine.
+    \item Crash failure: Processes may fail by stopping. Any good process that fails to send messages or aborts its execution is considered byzantine. This is a worst-case assumption to ensure correctness even if for any unknown reason a good process fails.
     \item Processes send conflicting data to different processes in the same round. Any data that is not the same or is null is said to be conflicting.
     \item Processes send arbitrary content or more messages than necessary. Byzantine processes may try to do so to choke the communication and flood the network or overload the requests that need to be answered.
     \item Denial of service: Byzantine processes may deny responding to requests from good processes or may not forward messages as required. 
 \end{itemize}
 
-\subsection{Synchronization}
-To implement a synchronous model of communication, we make use of communicators that is essentially a group of processes. A synchronization operation, \texttt{MPI\_Barrier} is a routine provided by the MPI library. It allows one to specify a group to wait on. A process blocks on this call until all processes in the specified group reach this call. To keep all the processes in the network synchronized after each phase, this routine is used whose group is set to the active processes in the network.
-
-
-
 \subsection{Fault tolerance against crash failures}
-One assumption that is made throughout is that once a process suffers a crash failure, it cannot recover from it. An advantage of using TCP connections was that it allowed failure discovery in the case of a crash failure. If a process failed before the start of a phase, it would not communicate with any process in the next phase and neither would any other process be able to establish a connection with it. This led to failure discovery. If a process crashed within a phase, the wait groups helped in failure discovery. A timeout mechanism was used to implement this. Each phase had to be completed within a certain amount of time and if all the processes did not reach the synchronization operation within that allotted time, it indicated that a process was down and the other processes proceeded with the next phase. This mechanism worked since we were not dealing with more than $64$ processes and by running the system multiple times we could determine what the timeout value should be such that, with high probability, alive processes are allowed to finish the phase. An alternative to this method was sending an acknowledgement back but, we refrained from using this method since that meant dealing with twice the number of messages which added unnecessary overhead for our testing purposes. 
+We assume that once a process suffers a crash failure, it cannot recover from it. An advantage of using TCP connections was that it allowed failure discovery in the case of a crash failure. If a process failed before the start of a phase, no other process would be able to establish a connection with it which led to failure discovery. If a process crashed within a phase, the wait groups helped in detecting the failure by using a timeout mechanism. Each phase had to be completed within a certain amount of time and if all the processes did not reach the synchronization operation within that allotted time, it indicated a process failure and the other processes proceeded with the next phase. This mechanism worked since we were not dealing with more than $64$ processes and by running the system multiple times we could determine a timeout value that allowed alive processes to finish the phase with high probability. An alternative to this method was sending an acknowledgement back but, we refrained from using this method since that meant dealing with twice the number of messages which added unnecessary overhead for our testing purposes. 
 
 \subsection{Message format}
 Each message sent over the network was an array of bytes of the following form:
@@ -67,6 +66,7 @@ For the \textit{EIG} algorithm, from Fig. \ref{fig:eig}, we can see that as the 
 \includegraphics[scale=0.4]{eig}
 \caption{Performance results for EIG algorithm (Log Scale)}
  \label{fig:eig}
+\vspace{-2mm}
 \end{figure}
 
 %\begin{figure}[ht]
@@ -81,6 +81,7 @@ For the \textit{Pull-Push} algorithm, as the network size increases the bit comp
 \includegraphics[scale=0.4]{pull_push}
 \caption{Performance results for Pull-Push algorithm (Log scale)}
  \label{fig:pull_push}
+\vspace{-2mm}
 \end{figure}
 
 The \textit{Quorum} algorithm shows very high bits per process communication even for small networks. It increases rapidly as the network size increases. The reason for this is that \textit{Graded broadcast} requires all-to-all communication between processes and the protocol requires processes to run a deterministic byzantine agreement protocol for every subset of a committee in Stage $2$ of the protocol. The fault ratios do not have much of an effect on the communication costs. Byzantine processes are unable to increase bits on the network by participating in more sub-protocols than the algorithm requires since membership in a sub-protocol is dictated by their ID, which is fixed. Hence, more number of processes are unable to influence the communication cost greatly which is already high.  
@@ -89,6 +90,7 @@ The \textit{Quorum} algorithm shows very high bits per process communication eve
 \includegraphics[scale=0.4]{quorum}
 \caption{Performance results for Quorum algorithm (Log scale)}
  \label{fig:quorum}
+\vspace{-2mm}
 \end{figure}
 
 Each of our algorithms for every configuration was run $5$ times and we obtained confidence intervals for each of them. The confidence interval for algorithm \textit{Pull-Push} was $\pm 1\%$, for algorithm \textit{EIG} - $\pm 0.1\%$, and $\pm 0.5\%$ for algorithm \textit{Quorum}.
@@ -103,6 +105,7 @@ Next, we modify the \textit{EIG} protocol a little to require that instead of se
 \includegraphics[scale=0.4]{LargeNetBit}
 \caption{Comparison for large networks}
  \label{fig:comp}
+\vspace{-2mm}
 \end{figure}
 
 \begin{figure}[ht]
@@ -110,6 +113,7 @@ Next, we modify the \textit{EIG} protocol a little to require that instead of se
 \includegraphics[scale=0.4]{Fault25}
 \caption{Comparison for high \% of faults}
  \label{fig:fault25}
+\vspace{-2mm}
 \end{figure}
 
 \begin{figure}[ht]
@@ -117,6 +121,7 @@ Next, we modify the \textit{EIG} protocol a little to require that instead of se
 \includegraphics[scale=0.4]{Fault667}
 \caption{Comparison for low \% of faults}
  \label{fig:fault667}
+\vspace{-2mm}
 \end{figure}
 
 \begin{figure}[ht]
@@ -124,6 +129,7 @@ Next, we modify the \textit{EIG} protocol a little to require that instead of se
 \includegraphics[scale=0.4]{Fault5}
 \caption{Comparison for low \% of faults}
  \label{fig:fault5}
+\vspace{-2mm}
 \end{figure}
 
 For small networks ($n < 40$), if the fault ratio is small and in the range $[0, 1/15)$, Figs. \ref{fig:fault667} and \ref{fig:fault5} show that algorithm \textit{EIG} performs much better than any of the other algorithms. This is simply because only the first three rounds of this algorithm will be executed and since the ratio is small, a simple broadcast is sufficient to gather all the information. \textit{Pull-Push} and \textit{Quorum}, which are more complex algorithms, perform worse in such scenarios. Fig. \ref{fig:fault25}, shows that for higher fault ratios and any network size algorithm \textit{Pull-Push} performs better.
@@ -146,6 +152,7 @@ Round complexity is the number of phases that have to be executed sequentially b
 \includegraphics[scale=0.4]{Round16}
 \caption{Round Complexity comparison}
  \label{fig:round16}
+\vspace{-2mm}
 \end{figure}
 
 \begin{figure}[ht]
@@ -153,6 +160,7 @@ Round complexity is the number of phases that have to be executed sequentially b
 \includegraphics[scale=0.4]{Round6}
 \caption{Round Complexity comparison}
  \label{fig:round6}
+\vspace{-2mm}
 \end{figure}
 
 A comparison of the round complexities can be seen in Figs. \ref{fig:round16} and \ref{fig:round6} for fault percentage $~16.5\%$ and $~6.5\%$, respectively. We can see that for a very small ratio of $~6.5\%$ the round complexity of \textit{EIG} is better but for larger ratios and larger networks $(n > 40)$ \textit{Quorum} performs better than the other two. 
@@ -167,6 +175,7 @@ For performance comparison of latency, we compare the total CPU times and elapse
 \includegraphics[scale=0.4]{cpu16}
 \caption{CPU time utilization comparison}
  \label{fig:cpu}
+\vspace{-2mm}
 \end{figure}
 
 \begin{figure}[ht]
@@ -174,6 +183,7 @@ For performance comparison of latency, we compare the total CPU times and elapse
 \includegraphics[scale=0.4]{elapsed16}
 \caption{Elapsed real time comparison}
  \label{fig:elapsed}
+\vspace{-2mm}
 \end{figure}
 
 %Fig. \ref{fig:time} the first mechanism for calculating time complexity of algorithm Quorum is used, where it is considered that all the subprotocols together form one round. This figure shows the algorithm Quorum gives better performance than algorithms EIG and Pull-Push as the number of processes in the network increases. Also, algorithm Pull-Push diverges in complexity due to increasing number of candidate strings that could be injected by the adversarial processes.

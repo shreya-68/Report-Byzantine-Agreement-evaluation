@@ -94,17 +94,18 @@ The algorithm makes use of \textit{quorums} to filter requests or messages sent 
 
 Each process starts with a candidate string (the string to be agreed upon). The assumption is that more than half of the processes are both correct and have the same candidate string. The algorithm proceeds in two phases. In each of the phases, messages are sent only to selectively chosen processes or are received from selectively chosen processes by sampler functions. The detailed algorithm is given as follows:
 
+\input{push}
 
 \textbf{Push Phase}
 
  In the first phase, each process starts to \textit{diffuse} (send) its candidate string $g_{\mathtt{string}}$. A push occurs when a process receives information about their candidate string from other processes without asking for it. To each pair of string $s$ and process $x$, the push quorum $I(x,s)$ assigns a set of $O(log\;n)$ processes. $x$ may receive pushes for $s$ from processes in $I(x,s)$ only. If more than half of the processes of $I(x,s)$ push for $s$, $s$ is added to $x$'s candidate list $L_x$. Refer to Algorithm \ref{alg:push} for the detailed implementation.
 
-\input{push}
 
 \input{pull}
 
 \input{route}
 
+\input{desc_algo2}
 
 \textbf{Pull Phase}
 
@@ -112,6 +113,7 @@ In the second phase, called the pull phase, the bogus strings are discarded so t
 
 
 Algorithms \ref{alg:send_pull}, \ref{alg:rout_pull} and \ref{alg:ans_pull} give a detailed implementation of the sending, routing and answering of pull requests.
+
 %\begin{enumerate}
 %\item Sending Queries: Each node $x$ verifies each string $s \in L_x$ by polling a set of nodes. A random string $r_{x,s}$ is chosen to define $J(x, r_{x,s})$. A different random string is used for each candidate string $s$. Next, $x$ sends a `POLL' request to Poll List $J(x, r_{x,s})$ and a `PULL' request to Push Quorum $H(x, s)$.
 %\item Answering: 
@@ -128,12 +130,6 @@ Algorithms \ref{alg:send_pull}, \ref{alg:rout_pull} and \ref{alg:ans_pull} give 
 %\item Deciding: If $x$ receives answers from a majority of nodes in $J(x, r_{x,s})$, $s$ is deemed to be the global string.
 %\end{enumerate}
 
-
-\input{desc_algo2}
-
-
-
-
 \subsubsection{Algorithm EIG \cite{KM13}}
 This protocol, similar to the classic protocol by \cite{Bar-NoyD91}, has two phases. In the first phase, each process communicates with every other process for $k + 1$ rounds and stores the collected information in each round at a corresponding level in a tree-like data structure. In the second phase, a bottom-up evaluation is done on each of the trees at each process. The fundamental difference between this protocol and past EIG solutions is that after a couple of rounds instead of storing and sending proposed values at each level of the tree, only an array of suspected byzantine processes is sent. This array is updated after each round using what is known as the confirmation mechanism which works as follows:
 \begin{itemize}
@@ -148,9 +144,9 @@ This protocol, similar to the classic protocol by \cite{Bar-NoyD91}, has two pha
     \textbf{Round 3} The echoed messages received in round $2$ are sent as echo messages and the suspected byzantine list is sent as the main information. Confirmation mechanism is applied to the echoed information and byzantine list is updated. \\
     \textbf{Round r, ($4 \leq r \leq k+1$)} From 4th round onwards the suspected byzantine list of a process is sent as its main information and byzantine lists received in the previous round are echoed. Confirmation mechanism is applied to the received echo information and byzantine lists are once again updated. Nodes at corresponding levels of the EIG tree for round 3 onwards, for each process $p_i$, are given values for $\mathtt{val}$ and $\mathtt{cval}$ as follows:
     \begin{itemize}
-        \item For node $x=ykl$, $\mathtt{val(x)} = \top$, if $p_l$ never reported to $p_i$ by round $k$ that it suspects $p_k$, otherwise $\mathtt{val(x)} = \bot$.
-        \item For node $x=yjkl$, $\mathtt{cval(x)} = \top$, if $p_l$ never reported to $p_i$ by round $k+1$ that $p_k$ suspects $p_j$, otherwise $\mathtt{cval(x)} = \bot$.
-        \item For leaf nodes $x = ykl$, $\mathtt{val(x)} = \top$, if $p_l$ did not report to $p_i$ that it suspects $p_k$, otherwise $\mathtt{val(x)} = \bot$.
+        \item For node $x=ykl$, $\mathtt{val(x)} = \top$, if $p_l$ never reported to $p_i$ by round $k$ that it suspects $p_k$, else $\mathtt{val(x)} = \bot$.
+        \item For node $x=yjkl$, $\mathtt{cval(x)} = \top$, if $p_l$ never reported to $p_i$ by round $k+1$ that $p_k$ suspects $p_j$, else $\mathtt{cval(x)} = \bot$.
+        \item For leaf nodes $x = ykl$, $\mathtt{val(x)} = \top$, if $p_l$ did not report to $p_i$ that it suspects $p_k$, else $\mathtt{val(x)} = \bot$.
     \end{itemize}
 where $y$ is a string of ids (possibly empty), and $j, k, l$ are ids of three different processes. The important point to note here is that in every round even though the number of nodes in the EIG tree increases by factor $n$, the new information received remains quadratic which allows us to use arrays to store this information. Even the size of the echoed messages remains quadratic in every round. 
 
