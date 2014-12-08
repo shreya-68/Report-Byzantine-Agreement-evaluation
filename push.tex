@@ -1,7 +1,9 @@
 
 
         \begin{minipage}[h]{0.90\columnwidth}
-        \begin{Ualgorithm}
+        \begingroup
+        \removelatexerror
+        \begin{algorithm}[H]
          \caption{Push phase}%
          \footnotesize
                \label{alg:push}%
@@ -31,5 +33,6 @@
         }
 
 
-    \end{Ualgorithm}%
+    \end{algorithm}%
+    \endgroup
   \end{minipage}%

@@ -1,5 +1,7 @@
 \begin{minipage}[H]{0.90\columnwidth}
-    \begin{Ualgorithm}
+        \begingroup
+        \removelatexerror
+        \begin{algorithm}[H]
          \footnotesize
          \caption{Sending Pull Request}%
                \label{alg:send_pull}%
@@ -26,5 +28,6 @@
                     }
                 }
         }
-    \end{Ualgorithm}%
+    \end{algorithm}%
+    \endgroup
   \end{minipage}%
