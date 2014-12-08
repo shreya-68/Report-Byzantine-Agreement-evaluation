@@ -1,4 +1,4 @@
-\title{A Performance Comparison of Byzantine Agreement in Distributed Systems}
+\title{A Performance Comparison of Algorithms for Byzantine Agreement in Distributed Systems}
 %\subtitle{CS654 Project Proposal}
 
 
@@ -27,19 +27,19 @@ system. These issues pose a problem to scalability, safety, liveness,
 reliability and performance of the system. Impossibility results have
 been shown for deterministic solutions for the first case, even in the
 presence of one fault. For the second case, researchers have taken
-different approaches to find better performing solutions. While strong
+different approaches to find performant solutions. While strong
 theoretical results give us an insight into the efficiency of an
 algorithm, they sometimes come with large hidden constants and might not
 be practical for a real system. In this paper, we compare the 
 performance of two randomized algorithms, one using the {\em pull-push} approach
 and the other using the concept of {\em quorums}, and a third recent simple
-deterministic algorithm that performs
+deterministic algorithm that we expect to perform
 better in certain cases.
 Three metrics have been used for comparison - {\em bit}
 complexity, {\em round} complexity and {\em latency} with respect to varying network sizes and
-faulty processes. By implementing a testbed environment and using these metrics, we identify instances when each of these
-algorithms perform differently under varying resource constraints and
-number of faults. We show that for small networks ($n<32$) and up to $10\%$ of faulty processes, the simple deterministic algorithm performs better than any randomized one. However, for larger networks, the algorithm with the pull-push approach performs better than any other state-of-the-art algorithm. Although, the trade-off here is between communication and round complexity, the second randomized algorithm performs much better in terms of round complexity than the other two. 
+faulty processes. By implementing a testbed environment and using these metrics, we identify instances for which each 
+algorithm performs differently under varying resource constraints and
+number of faults. We show that for small networks ($n<32$) and up to $10\%$ of faulty processes, the simple deterministic algorithm performs better than any of the randomized ones. However, for larger networks, the best performance is shown by the algorithm with the pull-push approach. Although, the trade-off here is between communication and round complexity, the second randomized algorithm performs much better in terms of round complexity than the other two. 
 
 \end{abstract}
 
