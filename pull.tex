@@ -1,6 +1,5 @@
-
-        \begin{minipage}[H]{0.80\columnwidth}
-        \begin{Ualgorithm}
+\begin{minipage}[H]{0.90\columnwidth}
+    \begin{Ualgorithm}
          \footnotesize
          \caption{Sending Pull Request}%
                \label{alg:send_pull}%
@@ -9,7 +8,7 @@
         \KwOut{String agreed upon}
         
         
-        \ForEach{ $s$ in $L_{P_i}$}{
+        \ForEach{ $s \in L_{P_i}$}{
             $r_{P_i, s} \gets$ generateRand()\;
             $J_{r,s} \gets$ getPollList($r_{P_i, s}, P_i$)\;
             $H_s \gets$ getPullQuorum($s$, $P_i$)\;
@@ -18,7 +17,7 @@
 
             Upon event: recv$(ANSWER,s,r)  \Leftarrow w$\;
             \Indp 
-                \If{$w$ in $J_{r,s}$}{
+                \If{$w \in J_{r,s}$}{
                     $\mathtt{count}_s ++$\;
                     \If{$\mathtt{count}_s > \frac{1}{2}|J_{r,s}|$}{
                         has\_decided $\gets$ true\;
@@ -27,7 +26,5 @@
                     }
                 }
         }
-
-
     \end{Ualgorithm}%
   \end{minipage}%

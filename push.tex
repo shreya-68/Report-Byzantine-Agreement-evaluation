@@ -1,6 +1,6 @@
 
 
-        \begin{minipage}[h]{0.80\columnwidth}
+        \begin{minipage}[h]{0.90\columnwidth}
         \begin{Ualgorithm}
          \caption{Push phase}%
          \footnotesize
@@ -16,10 +16,10 @@
         $L_{P_i} \gets g_{string}$\;
 
         
-        \ForEach{ $str$ in $C_{string}$}{
+        \ForEach{ $str \in C_{string}$}{
 
             $I_{str} \gets$ getPushQuorum($\mathtt{str}, P_i$)\;
-            \ForEach{$p$ in $I_{str}$}{
+            \ForEach{$p \in I_{str}$}{
                 \If{$recv(I_s) == str$}{
                     $num++$\;
                 }

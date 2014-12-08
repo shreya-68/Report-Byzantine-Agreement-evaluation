@@ -15,24 +15,24 @@
         $gradecast(B_i)$\;
 
         
-        \ForEach{ $P_j$ in $P$}{
+        \ForEach{ $P_j \in P$}{
 
         $(v_i^j, c_i^j) \gets recv(P_j)$\;
 
         }
 
-        \ForEach{ $C_k$ in $C$}{
+        \ForEach{ $C_k \in C$}{
 
-            \ForEach{$P_j$ in $P$}{
+            \ForEach{$P_j \in P$}{
                 \If{$v_i^j == C_k$ and $c_i^j == 2$}{
 
                     $\mathtt{view}_i(C_k) \gets \mathtt{view}_i(C_k) \cup P_j$\;
                 }
             }
         }
-        \ForEach{ $C_k$ in $C$}{
+        \ForEach{ $C_k \in C$}{
 
-            \ForEach{$P_j$ in $P$} {
+            \ForEach{$P_j \in P$} {
 
                 \uIf{$v_i^j == C_k$ and $c_i^j > 2$}{
 

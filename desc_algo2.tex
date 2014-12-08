@@ -1,6 +1,6 @@
 
 
-        \begin{minipage}[H]{0.80\columnwidth}
+        \begin{minipage}[H]{0.90\columnwidth}
         \begin{Ualgorithm}
          \footnotesize
          \caption{Answering Pull Request}%
@@ -13,9 +13,9 @@
             }
             $J_{x,r_{x,s}} \gets$ getPollList($r_{x, s}, x$)\;
             $H_{P_i,s} \gets$ getPullQuorum($s$, $P_i$)\;
-            \If{$g_{string} == s$ and $P_i$ in $J_{x, r_{x,s}}$ and $z$ in $H(P_i, s)$}{
+            \If{$(g_{string} == s)$ and $(P_i \in J_{x, r_{x,s}})$ and $(z \in H(P_i, s))$}{
                 $\mathtt{fw\_count}_{s,x}++$\;
-                \If{$\mathtt{fw\_count}_{s,x} > \frac{1}{2}|H_{x,s}|$ and $(x, s)$ in $\mathtt{Polled}$}{
+                \If{$(\mathtt{fw\_count}_{s,x} > \frac{1}{2}|H_{x,s}|)$ and $((x, s) \in \mathtt{Polled})$}{
                     $\mathtt{count}_s ++$\;
                     send$(ANSWER, s, r_{x, s}) \Rightarrow x$\;
                 }
@@ -23,7 +23,7 @@
         \Indm Upon event: $\mathtt{recv}(POLL, s, r_{x,s}) \Leftarrow x$\;
         \Indp 
             $J_{x,r_{x,s}} \gets$ getPollList($r_{x, s}, x$)\;
-            \If{$P_i$ in $J_{x, r_{x,s}}$}{
+            \If{$P_i \in J_{x, r_{x,s}}$}{
                 $\mathtt{Polled} \gets \mathtt{Polled} \cup (x,s)$\;
                 \If{$\mathtt{fw\_count}_{s,x} > \frac{1}{2}|H_{x,s}|$}{
                     $\mathtt{count}_s ++$\;
