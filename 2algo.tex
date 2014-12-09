@@ -43,7 +43,7 @@
                 $(S_j, C_i, \mathtt{disq}, \mathtt{comp}) \gets \mathtt{recv}(S_j')$\;
 
                 \ForAll{$(S_j, C_i, 1, *)$}{
-                    \If{$\mid S_j' \mid \geq \frac{1}{2}\mathtt{alogn}$ and $S_j' \subseteq S_j \subseteq \mathtt{view}_i(C_i)$}{
+                    \If{$\mid S_j' \mid \geq \frac{1}{2}\mathtt{alogn}$ and $S_j' \subseteq S_j \subseteq \mathtt{view}_k(C_i)$}{
                         $\mathtt{disq}_{P_i}(C_i) = 1$\;
                     }
                 }
@@ -52,13 +52,13 @@
                         \If{$ (S_j' \subseteq S_j)$ and $(\mid S_j' \mid \geq \frac{1}{2}\mathtt{alogn})$}{
                             $\mathtt{composition}_{S_j}(C_i) \gets D$\;
                         }
-                        {
+                        \Else {
                             $\mathtt{composition}_{S_j}(C_i) \gets \bot$\;
                         }
                     }
-                    \ForAll{$S_j$}{
-                            $\mathtt{composition}(C_i) \gets$ largest$(\mathtt{composition}_{S_j}(C_i))$\;
-                    }
+                }
+                \ForAll{$S_j$}{
+                        $\mathtt{composition}(C_i) \gets$ largest$(\mathtt{composition}_{S_j}(C_i))$\;
                 }
             \Indm \ForAll{$C_i$}{
                  $C_{small} \gets$ Choose\_smallest($\mathtt{composition}(C_i)$)\;

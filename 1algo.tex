@@ -24,22 +24,26 @@
         \ForEach{ $C_k \in C$}{
 
             \ForEach{$P_j \in P$}{
-                \If{$v_i^j == C_k$ and $c_i^j == 2$}{
+                \uIf{$v_i^j == C_k$ and $c_i^j == 2$}{
 
                     $\mathtt{view}_i(C_k) \gets \mathtt{view}_i(C_k) \cup P_j$\;
                 }
-            }
-        }
-        \ForEach{ $C_k \in C$}{
-
-            \ForEach{$P_j \in P$} {
-
-                \uIf{$v_i^j == C_k$ and $c_i^j > 2$}{
+                \uIf{$v_i^j == C_k$ and $c_i^j > 0$}{
 
                     $\mathtt{\bar{view}}_i(C_k) \gets \mathtt{\bar{view}}_i(C_k) \cup P_j$\;
                 }
             }
         }
+        %\ForEach{ $C_k \in C$}{
+
+        %    \ForEach{$P_j \in P$} {
+
+        %        \uIf{$v_i^j == C_k$ and $c_i^j > 0$}{
+
+        %            $\mathtt{\bar{view}}_i(C_k) \gets \mathtt{\bar{view}}_i(C_k) \cup P_j$\;
+        %        }
+        %    }
+        %}
 
     \end{algorithm}%
     \endgroup
