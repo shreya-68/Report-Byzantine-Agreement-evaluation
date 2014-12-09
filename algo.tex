@@ -65,7 +65,7 @@ The protocol is described in detail as follows: \\
 
 \input{1algo}
 
-This algorithm for Byzantine Agreement proceeds in stages. It makes use of Feige's protocol \cite{Feige99} for collective coin-flipping which works as follows: in the first round, all the processes throw a ball at random into one of $O(n/log\;n)$ bins. The processes which throw their ball into the \textit{lightest bin} survive. The protocol is invoked recursively on the $O(log\;n)$ processes in the lightest bin. Algorithms \ref{alg:stage1} and \ref{alg:stage2} detail this procedure of agreeing on a small committee.
+This algorithm proceeds in stages. It makes use of Feige's protocol \cite{Feige99} for collective coin-flipping which works as follows: in the first round, all the processes throw a ball at random into one of $O(n/log\;n)$ bins. The processes which throw their ball into the \textit{lightest bin} survive. The protocol is invoked recursively on the $O(log\;n)$ processes in the lightest bin. Agreement on the lightest bin is achieved by running \textit{sub-protocols} among every subset of processes of size $\frac{3}{4}logn$. These sub-protocols can be executed in parallel since the decision of one does not affect the other. Algorithms \ref{alg:stage1} and \ref{alg:stage2} details this procedure.
 
 \input{2algo}
 
