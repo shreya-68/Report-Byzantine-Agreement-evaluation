@@ -8,7 +8,7 @@
          \footnotesize
                \label{alg:push}%
       %\SetAlgoLined
-               \KwIn{Process $P_i$ with a random string $g_{string}$, a list of all strings $C_{string}$}
+               \KwIn{Process $P_i$ with a random string $g_{string}$, a list of all possible strings $C_{string}$}
         \KwOut{Each node creates a candidate strings list $L_{P_i}$}
         
         $g_{string} \gets$ createRandString()\;
@@ -22,12 +22,12 @@
 
             $I_{str} \gets$ getPushQuorum($\mathtt{str}, P_i$)\;
             \ForEach{$p \in I_{str}$}{
-                \If{$recv(I_s) == str$}{
+                \If{$recv(I_{str}) == str$}{
                     $num++$\;
                 }
             }
-            \If{$\mathtt{num} > len(I_s)$}{
-                $L_{P_i} \gets L_{P_i} \cup s$\;
+            \If{$\mathtt{num} > len(I_{str})/2$}{
+                $L_{P_i} \gets L_{P_i} \cup str$\;
             }
 
         }
