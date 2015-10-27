@@ -5,13 +5,13 @@
 
 \author{
 \IEEEauthorblockN{Shreya Agrawal}
-\IEEEauthorblockA{School of Computer Science\\
+\IEEEauthorblockA{David R. Cheriton School of Computer Science\\
 University of Waterloo\\
 s8agrawa@uwaterloo.ca }
 
 \and
 \IEEEauthorblockN{Khuzaima Daudjee}
-\IEEEauthorblockA{School of Computer Science\\
+\IEEEauthorblockA{David R. Cheriton School of Computer Science\\
 University of Waterloo\\
 kdaudjee@cs.uwaterloo.ca }}
 
@@ -21,19 +21,20 @@ kdaudjee@cs.uwaterloo.ca }}
 \begin{abstract}
 Reaching agreement in the presence of byzantine processes is an
 important task in distributed systems. Theoretical analysis of
-algorithms for Byzantine Agreement (BA) can provide insight into their
+algorithms for Byzantine Agreement can provide insight into their
 efficiency.  However, these algorithms can have large hidden constants,
 making them impractical for use in a real system. We compare the
-performance of two randomized BA algorithms, one using the {\em pull-push}
+performance of two randomized byzantine agreement algorithms, one using the {\em pull-push}
 approach and another using the concept of {\em quorums}, and a third recent
-simple deterministic BA algorithm. Through implementation on a testbed
+simple deterministic byzantine agreement algorithm. Through implementation on a testbed
 environment using the metrics of {\em bit} complexity, {\em round} complexity and
 {\em latency} in the presence of network sizes and faulty processes, we
-quantify the performance of each algorithm. We show that for small
-networks $(n < 32)$ and up to $10\%$ of faulty processes, the simple
-deterministic algorithm performs best while for larger networks, 
+quantify the performance of each algorithm. In terms of bit complexity, we show that for small
+networks $(n < 32)$ and up to $10\%$ faulty processes, the simple
+deterministic algorithm performs best, while for larger networks, 
 {\em pull-push} is the best performing algorithm. The second randomized
 algorithm performs best in terms of latency.
+
 
 %Ensuring that all processes in a network agree in the
 %presence of byzantine processes is known to be a challenging task in
@@ -60,4 +61,4 @@ algorithm performs best in terms of latency.
 
 \end{abstract}
 
-\noindent {\bf Keywords:} Distributed systems, Performance, Byzantine failures, Fault-tolerant, Consensus, Complexity.
+%\noindent {\bf Keywords:} Distributed systems, Performance, Byzantine failures, Fault-tolerant, Consensus, Complexity.
