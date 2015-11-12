@@ -1,11 +1,11 @@
 
-\documentclass[conference]{IEEEtran}
+\documentclass[preprint]{elsarticle}
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{url}
-\usepackage{cite}
+%\usepackage{cite}
 \usepackage{float}
 \usepackage{lipsum}
 \usepackage{caption}
@@ -20,6 +20,8 @@
 \usepackage{multicol}
 \usepackage{cancel}
 \usepackage{wrapfig}
+\usepackage{todonotes}
+\usepackage{natbib}
 
 \lstset{language=C}
 
@@ -68,7 +70,13 @@
 \input{algo}
 \input{eval}
 \input{conc}
-\bibliographystyle{plain}
+
+\newpage
+\bibliographystyle{plainnat}
 \bibliography{bibliography}
+
+\newpage
+\appendix
+\input{appendix}
 
 \end{document}

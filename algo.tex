@@ -2,18 +2,15 @@
 \label{sec:algos}
 
 \begin{table*}[t]
-    \vspace{-5mm}
     \caption{}
-    \vspace{-2mm}
-    \begin{tabular}{p{2cm}llllllp{2.5cm}p{2cm}}
+    \begin{tabular}{p{2cm}lllp{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}}
 \hline
-\textbf{Algorithm} & \textbf{Year} & \textbf{Type} &\textbf{n} & \textbf{Rounds} & \textbf{Bit Complexity } &\textbf{Decision value} & \textbf{Communicating nodes}& \textbf{Remarks} \\ \hline
+\textbf{Algorithm} & \textbf{Year} & \textbf{Type} &\textbf{n} & \textbf{Rounds} & \textbf{Bit Complexity } &\textbf{Decision value} & \textbf{Commun\-icating nodes}& \textbf{Remarks} \\ \hline
 Ben-Or, Pavlov, Vaikuntanathan \cite{BPV06} (\textit{Quorum})& 2006 & Randomized & $4k + 1$ & $O(logn)$ & $n^{O(logn)}$      &String of $O(logn)$ bits &All-to-all communication and within quorums of size $O(logn)$   & Everywhere byzantine agreement     \\
           Braud-Santoni et al. \cite{BGH13} (\textit{Pull-Push}) & 2014 & Randomized & $3k + 1$ & $O(\frac{logn}{log\; log n})$ & $\tilde{o}(n)$      &String of $O(logn)$ bits &With samplers of size $O(logn)$  & Almost-everywhere to everywhere     \\
                 Kowalski and Mostefaoui \cite{KM13} (\textit{EIG}) & 2013   & Deterministic & $3k + 1$     & $k + 1$                     & $O(n^3logn)$ &Single bit  &All-to-all communication & Uses EIG data structure\\ \hline
 %
 \end{tabular}
-\vspace{-2mm}
 \end{table*}
 
 Here, we will describe the model of the network, adversarial conditions and the algorithms of \cite{BPV06}, \cite{BGH13} and \cite{KM13}, i.e., algorithm \textit{Quorum}, \textit{Pull-Push} and \textit{EIG}, respectively, that are to be evaluated under these conditions. Table 1 compares key properties of these algorithms.

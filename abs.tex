@@ -1,64 +1,76 @@
-\title{A Performance Comparison of Algorithms for Byzantine Agreement in Distributed Systems}
+\title{A Performance Comparison of Algorithms for Byzantine Agreement in
+Distributed Systems}
 %\\ {\large Regular Paper (ID 67)} \vspace{-5mm}}
 
 %\author{\IEEEauthorblockN{Paper ID 67}}
 
-\author{
-\IEEEauthorblockN{Shreya Agrawal}
-\IEEEauthorblockA{David R. Cheriton School of Computer Science\\
-University of Waterloo\\
-s8agrawa@uwaterloo.ca }
+%\author{ \IEEEauthorblockN{Shreya Agrawal} \IEEEauthorblockA{David R. Cheriton
+%School of Computer Science\\ University of Waterloo\\ s8agrawa@uwaterloo.ca }
+%
+%\and \IEEEauthorblockN{Khuzaima Daudjee} \IEEEauthorblockA{David R. Cheriton
+%School of Computer Science\\ University of Waterloo\\ kdaudjee@cs.uwaterloo.ca
+%}}
 
-\and
-\IEEEauthorblockN{Khuzaima Daudjee}
-\IEEEauthorblockA{David R. Cheriton School of Computer Science\\
-University of Waterloo\\
-kdaudjee@cs.uwaterloo.ca }}
+\author[uw]{Shreya Agrawal}
+\ead{shreya.agrawal@uwaterloo.ca}
+\author[uw]{Khuzaima Daudjee}
+\ead{kdaudjee@uwaterloo.ca}
+
+\address[uw]{University of Waterloo, Waterloo, Canada}
 
 \maketitle
 
 
-\begin{abstract}
-Reaching agreement in the presence of byzantine processes is an
-important task in distributed systems. Theoretical analysis of
-algorithms for Byzantine Agreement can provide insight into their
-efficiency.  However, these algorithms can have large hidden constants,
-making them impractical for use in a real system. We compare the
-performance of two randomized byzantine agreement algorithms, one using the {\em pull-push}
-approach and another using the concept of {\em quorums}, and a third recent
-simple deterministic byzantine agreement algorithm. Through implementation on a testbed
-environment using the metrics of {\em bit} complexity, {\em round} complexity and
-{\em latency} in the presence of network sizes and faulty processes, we
-quantify the performance of each algorithm. In terms of bit complexity, we show that for small
-networks $(n < 32)$ and up to $10\%$ faulty processes, the simple
-deterministic algorithm performs best, while for larger networks, 
-{\em pull-push} is the best performing algorithm. The second randomized
-algorithm performs best in terms of latency.
+\begin{abstract} Reaching agreement in the presence of byzantine processes is
+    an important task in distributed systems. Theoretical analysis of
+    algorithms for Byzantine Agreement can provide insight into their
+    efficiency.  However, these algorithms can have large hidden constants,
+    making them impractical for use in a real system. We compare the
+    performance of two randomized byzantine agreement algorithms---one using the
+    {\em pull-push} approach and another using the concept of {\em quorums}---
+    and a third recent simple deterministic byzantine agreement algorithm.
+    Through implementation on a testbed environment using the metrics of {\em
+    bit} complexity, {\em round} complexity and {\em latency} in the presence
+    of network sizes and faulty processes, we quantify the performance of each
+    algorithm. In terms of bit complexity, we show that for small networks $(n
+    < 32)$ and up to $10\%$ faulty processes, the simple deterministic
+    algorithm performs best, while for larger networks, {\em pull-push} is the
+    best performing algorithm. The second randomized algorithm performs best in
+    terms of latency.
 
 
-%Ensuring that all processes in a network agree in the
-%presence of byzantine processes is known to be a challenging task in
-%distributed systems. This is fundamentally due to two reasons: (1)
-%asynchronous execution of systems, and (2) byzantine
-%processes colluding together to inject arbitrary values in a synchronous/asynchronous
-%system. These issues pose a problem to scalability, safety, liveness,
-%reliability and performance of the system. Impossibility results have
-%been shown for deterministic solutions for the first case, even in the
-%presence of one fault. For the second case, researchers have taken
-%different approaches to find performant solutions. While strong
-%theoretical results give us an insight into the efficiency of an
-%algorithm, they sometimes come with large hidden constants and might not
-%be practical for a real system. In this paper, we compare the 
-%performance of two randomized algorithms, one using the {\em pull-push} approach
-%and the other using the concept of {\em quorums}, and a third recent simple
-%deterministic algorithm that we expect to perform 
-%better in certain cases.
-%Three metrics have been used for comparison - {\em bit}
-%complexity, {\em round} complexity and {\em latency} with respect to varying network sizes and
-%faulty processes. By implementing a testbed environment and using these metrics, we identify instances for which each 
-%algorithm performs differently under varying resource constraints and
-%number of faults. We show that for small networks ($n<32$) and up to $10\%$ of faulty processes, the simple deterministic algorithm performs better than any of the randomized ones. However, for larger networks, the best performance is shown by the algorithm with the pull-push approach. Although, the trade-off here is between communication and round complexity, the second randomized algorithm performs much better in terms of round complexity than the other two. 
+%Ensuring that all processes in a network agree in the presence of byzantine
+%processes is known to be a challenging task in distributed systems. This is
+%fundamentally due to two reasons: (1) asynchronous execution of systems, and
+%(2) byzantine processes colluding together to inject arbitrary values in
+%a synchronous/asynchronous system. These issues pose a problem to scalability,
+%safety, liveness, reliability and performance of the system. Impossibility
+%results have been shown for deterministic solutions for the first case, even
+%in the presence of one fault. For the second case, researchers have taken
+%different approaches to find performant solutions. While strong theoretical
+%results give us an insight into the efficiency of an algorithm, they sometimes
+%come with large hidden constants and might not be practical for a real system.
+%In this paper, we compare the performance of two randomized algorithms, one
+%using the {\em pull-push} approach and the other using the concept of {\em
+%quorums}, and a third recent simple deterministic algorithm that we expect to
+%perform better in certain cases.  Three metrics have been used for comparison
+%- {\em bit} complexity, {\em round} complexity and {\em latency} with respect
+%to varying network sizes and faulty processes. By implementing a testbed
+%environment and using these metrics, we identify instances for which each
+%algorithm performs differently under varying resource constraints and number
+%of faults. We show that for small networks ($n<32$) and up to $10\%$ of faulty
+%processes, the simple deterministic algorithm performs better than any of the
+%randomized ones. However, for larger networks, the best performance is shown
+%by the algorithm with the pull-push approach. Although, the trade-off here is
+%between communication and round complexity, the second randomized algorithm
+%performs much better in terms of round complexity than the other two. 
 
 \end{abstract}
 
-%\noindent {\bf Keywords:} Distributed systems, Performance, Byzantine failures, Fault-tolerant, Consensus, Complexity.
+%\noindent {\bf Keywords:} Distributed systems, Performance, Byzantine
+%failures, Fault-tolerant, Consensus, Complexity.
+
+\begin{keyword}
+Distributed systems\sep Performance\sep Byzantine
+failures\sep Fault-tolerant\sep Consensus\sep Complexity.
+\end{keyword}

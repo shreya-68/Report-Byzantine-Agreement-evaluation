@@ -9,11 +9,9 @@ If we were to consider a network with its size showing high variance over time, 
 Furthermore, we demonstrated a trade-off between the number of communication bits and the number of rounds: algorithm \textit{Quorum} terminated in lower number of rounds than \textit{Pull-Push} for all network sizes and fault ratios. This can be attributed to its highly parallel protocol. Algorithm \textit{EIG} displayed growth proportional to the size of the network, and performed well only for very low fault ratios of $<10\%$. This trend are reflected in the latency results as well when we consider the elapsed real time. However, the total CPU time utilization increased rapidly for \textit{Quorum} due to the exponential increase in the number of sub-protocols executed in parallel as the network size increased.
 \begin{figure}[ht]
  \centering
-\vspace{-2mm}
 \includegraphics[scale=0.4]{crash}
 \caption{Comparison for crash failures}
  \label{fig:crash}
-\vspace{-4mm}
 \end{figure}
 
 In the case of a denial of service attack, an increasing ratio of faulty processes reduced the communication overhead instead of increasing it. Similar results were also observed for crash failures. To evaluate the effect of crashes, we tested the system such that crash failures occurred on a uniform distribution over time. As can be seen in Fig. \ref{fig:crash}, an increasing fault ratio keeps the number of bits sent almost the same. If the faulty processes sent out only arbitrary messages, the algorithms executed correctly without hampering the communication cost much even if the ratio of byzantine processes was increased.
