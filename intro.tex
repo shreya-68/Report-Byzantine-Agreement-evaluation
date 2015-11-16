@@ -63,44 +63,47 @@ important than ever before.
 In the past, researchers have tried to optimize either the \textit{message}
 complexity or the \textit{round} complexity of algorithms in the worst case
 scenarios. Worst-case bounds are insufficient to provide an insight into the
-tradeoffs that exist between the two under various conditions such as varying 
-network size and, percentage of faults. However, experimental evaluation 
-can provide detailed results on guarantees of algorithms under
-such varying conditions.  While the literature is rich in theoretical results,
-there has been a lack of extensive practical results for these algorithms. This
-can be largely attributed to the fact that simple algorithms are theoretically
-inefficient while the more complex ones are hard to implement. Theoretical
-results give us information about the worst case scenarios but in
-practice, the system does not always run in the worst case. 
+trade-offs that exist between these two types of optimizations under various
+conditions such as varying network size, and percentage of faults. However,
+experimental evaluation can help greatly by providing detailed results on
+guarantees of algorithms under such varying conditions.  While the literature
+is rich in theoretical results, there has been a lack of extensive practical
+results for these algorithms. This can be largely attributed to the fact that
+simple algorithms are theoretically inefficient while the more complex ones are
+not easy to implement. Theoretical results give us information about the worst
+case scenarios but in practice, the system often does not run in the worst
+case. 
 
 In real-world systems, certain constraints---for example, communication
-ban\-d\-widths---may exist which are not considered in theoretical results. Such
-constraints can reduce the performance---if the available bandwidth is
-small---or can be used to our advantage by tweaking the algorithm---sending
-multiple packets together instead of in separate rounds. Furthermore, analytical 
-techniques using the Big `O' notation can hide large constants which are
-of significance when we look at memory or bandwidth consumption in a real-world
-system. Many complex algorithms make certain assumptions about systems, for
-example, the existence of a large fraction of faulty processes. However, in practice, 
-only a small fraction of processes are faulty and in such cases the
-algorithm would be unnecessarily complex and inefficient.
+ban\-d\-widths---may exist which are not considered in theoretical results.
+Such constraints can reduce the performance---if the available bandwidth is
+small---or can be used to our advantage by tweaking the algorithm to send
+multiple packets together instead of in separate rounds. Furthermore,
+analytical techniques using the Big `O' notation can hide large constants which
+are of significance when we look at memory or bandwidth consumption in
+a real-world system. Many complex algorithms make certain assumptions about
+systems, for example, the existence of a large fraction of faulty processes.
+However, in practice, only a small fraction of processes are usually faulty and
+in such cases the algorithm would be unnecessarily complex and inefficient.
 
 
-Analysis of an algorithm under such varying conditions, and understanding the
-performance under practical constraints is an incentive for experimental
-evaluation of theoretically well-performing algorithms. While some applications
-require best performance for either only number of bits required for
+Analysis of algorithms under such varying conditions and practical constraints
+through experimental evaluation can be key to understanding the performance of
+theoretically well-performing algorithms.  While some applications require best
+performance for either only number of bits required for
 communication or for the number of rounds taken to reach consensus, most
-applications \todo{add citation} require optimal results for both---size
-of and number of faults in the application. A comparison, therefore, 
-of best-performing results is necessary to understand how algorithms perform with respect to 
-each other. A way to achieve this is by selecting state-of-the-art algorithms having different design criteria and implementing them on a common platform.
+applications \cite{YJC} require optimal results for both---size and number of
+faults in the application. A comparison, therefore, of performant algorithms is
+necessary to understand how they perform with respect to each other. A way to
+achieve this is by selecting state-of-the-art algorithms having different
+designs and implementing them on a common platform to compare their
+performance.
 
 Motivated by these needs, we evaluate the performance of three recently
 proposed solutions for the Byzantine Agreement problem. Two of these are
-randomized algorithms - (1) by Ben-Or et al. \cite{BPV06}, which we call
+randomized algorithms---(1) by Ben-Or et al. \cite{BPV06}, which we call
 algorithm \textit{Quorum} throughout the paper, and (2) an almost-everywhere to
-everywhere algorithm by Braud-Santoni et al.  \cite{BGH13} combined with the
+everywhere algorithm by Braud-Santoni et al.~\cite{BGH13} combined with the
 almost-everywhere algorithm of \cite{KSSV06}, which we call algorithm
 \textit{Pull-Push}. An almost-everywhere algorithm reaches consensus among all
 but a fraction of the processes and an almost-everywhere to everywhere
@@ -121,49 +124,50 @@ asynchronous setting. Even in the synchronous setting, they provide major
 improvements over the deterministic algorithms by a factor polynomial in the
 size of the network. The probabilistic techniques provide an advantage - the
 worst-case scenarios can be eliminated by giving them a probability of $0$ and
-a probability distribution is given to the other cases. In cyber-physical systems, 
-logical synchrony is crucial as in the case of a flight system where the supervisory control is a global computation~\cite{SASMO}.
-Many of the reactive systems that are safety-critical require determinism which is the target of synchronous programs\todo{Add citations}.
+a probability distribution is given to the other cases. In cyber-physical
+systems, logical synchrony is crucial as in the case of a flight system where
+the supervisory control is a global computation~\cite{SASMO}.  Many of the
+reactive systems that are safety-critical require determinism which is the
+target of synchronous programs~\cite{MVF00, LH94}.
 
 
-Algorithm
-\textit{Pull-Push}, is one of the most recent and best-known result in terms of
-communication complexity. The main contribution of the paper has been to give
-an almost-everywhere to everywhere solution, which improves the amortized
-communication complexity to $\tilde{O}(1)$ per node\footnote{$\tilde{O}$ is
-same as $O$ up to a poly-logarithmic factor.}. The previously best-known result
-was $\tilde{O}(n^{1/2})$ \cite{KLST11}.  The algorithm uses the model
-previously considered in \cite{KLST11,KSSV06,BPV06,KS09}, that of
-a synchronous, full-information model, with a non-adaptive adversary. They also
-show that similar results can be shown even in the case of an asynchronous
-model. This achievement in reducing the communication cost, however, comes at
-the cost of a higher round complexity, which is poly-logarithmic in the size of
-the network. 
+Algorithm \textit{Pull-Push}, is one of the most recent and best-known result
+in terms of communication complexity. The main contribution of the paper has
+been to give an almost-everywhere to everywhere solution, which improves the
+amortized communication complexity to $\tilde{O}(1)$ per
+node\footnote{$\tilde{O}$ is same as $O$ up to a poly-logarithmic factor.}. The
+previously best-known result was $\tilde{O}(n^{1/2})$ \cite{KLST11}.  The
+algorithm uses the model previously considered in
+\cite{KLST11,KSSV06,BPV06,KS09}, that of a synchronous, full-information model,
+with a non-adaptive adversary. They also demonstrate that similar results can
+be shown even in the case of an asynchronous model. This achievement in
+reducing the communication cost, however, comes at the cost of a higher round
+complexity, which is poly-logarithmic in the size of the network. 
 
-This trade-off between communication and round complexity
-motivated us to pick the algorithm \textit{quorum} for comparison. Algorithm
-\textit{quorum}, due to Ben-Or et al., has a round complexity of $O(logn)$
-although it shows a quasi-polynomial communication complexity of $n^{O(logn)}$.
-It uses the same setting as \textit{Pull-Push} and makes use of the well-known
-Feige's protocol of collective coin-flipping to decide on a small committee
-with the same fraction of good processes as in the whole network, which then
-runs a leader election protocol for agreement. A comparison of these two
-algorithms will allow us to understand how they perform with respect to each 
-other for both communication as well as round complexity. 
+This trade-off between communication and round complexity motivated us to pick
+the algorithm \textit{quorum} for comparison. This algorithm, due to Ben-Or et
+al., has a round complexity of $O(logn)$ although it shows a quasi-polynomial
+communication complexity of $n^{O(logn)}$.  It uses the same setting as
+\textit{Pull-Push} and makes use of the well-known Feige's protocol of
+collective coin-flipping to decide on a small committee with the same fraction
+of good processes as in the whole network, which then runs a leader election
+protocol for agreement. A comparison of these two algorithms will allow us to
+understand how they perform with respect to each other for both communication
+as well as round complexity. 
 
 While both these randomized algorithms attempt to improve upon the metrics for
 performance comparison, they consider worst-case scenarios when the fraction of
-adversarial processes is $n/3$ and $n/4$, respectively. On the other hand, in
-a real-world system, this fraction might actually be really small. This
+adversarial processes is $n/3$ and $n/4$, respectively. However, in
+a real-world system, this fraction can actually be quite small. This
 motivated us to choose a deterministic algorithm for comparison which considers
-this fraction during the execution of its algorithm and thus provides much
+this fraction during its execution and thus provides much
 better results for both communication and round complexity when the number of
 adversarial nodes to the size of the network is really small. \textit{EIG} is
 a recent deterministic algorithm, more efficient than the one by Garay et
 al.~\cite{GarayM98} that meets the bounds on the optimal range of Byzantine
-processes and communication rounds. Further, we make algorithmic modifications
-to this algorithm---removing the redundant information being sent in every round
-regarding the list of byzantine nodes---to show an improvement in the
+processes and communication rounds. Further, we make modifications
+to this algorithm by removing the redundant information being sent in every round
+regarding the list of byzantine nodes to show an improvement in the
 communication complexity. 
 
 
