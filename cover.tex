@@ -1,0 +1,64 @@
+\begin{center}
+
+\textbf{Submission to Information Sciences Special Issue on Dependability in Parallel and Distributed Systems and Applications}
+\end{center}
+
+
+\noindent Dear Guest Editors, \\
+
+We would like to submit the following manuscript entitled
+``A Performance Comparison of Algorithms for Byzantine
+Agreement in Distributed Systems'' for publication review for the 
+Special Issue on Dependability in Parallel and Distributed Systems and Applications.
+
+The Byzantine Agreement problem aims to achieve reliability in consensus
+protocols despite the failure of some number of components.  
+Analysis of algorithms under varying parameters and practical constraints through experimental evaluation can be key to understanding the performance and trade-offs of theoretically well-performing algorithms.
+
+We focus on implementation and analysis of three performant Byzantine
+Agreement algorithms with best results for their respective objectives of
+optimizing only communication complexity or latency, or meeting the
+worst-case bounds on both.
+
+Our experimental analysis shows that the algorithms perform differently for different network sizes.
+For networks with strict bandwidth constraints, algorithm by
+Braud-Santoni et al.~\cite{BGH13} allows high flexibility in changing the size
+of the network. For high variance of fault ratios, algorithm by Ben-Or et al.
+\cite{BPV06} prevented byzantine processes from influencing the communication
+complexity. Comparison of elapsed real time and CPU time utilization provides
+better insight into the utility of one of the parallel algorithms.  Moreover,
+we make modifications to the algorithm by Kowalski et al. \cite{KM13} to
+improve the communication bits sent in every round of the protocol.
+
+Quantifying the performance of the algorithms empirically provides a practical
+understanding and insight into how the different algorithms perform under different
+conditions to achieve consensus in distributed systems.
+
+Thank you. \\
+
+\noindent Sincerely,
+
+\noindent Shreya Agrawal and Khuzaima Daudjee 
+
+\noindent University of Waterloo
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%We focus on implementation and analysis of three recently proposed algorithms with best algorithms for their respective agendas---(1) algorithm \textit{Quorum} by Ben-Or et al. \cite{BPV06}, (2) algorithm \textit{Pull-Push} by Braud-Santoni et al.~\cite{BGH13}, and (3) algorithm \textit{EIG} (Exponential Information Gathering) by Kowalski et al. \cite{KM13}. 
+%In general, the randomized algorithm \textit{Pull-Push} performs better than
+%the other two in terms of communication complexity. When latency is considered,
+%algorithm \textit{Quorum} performs better.
+%
+%In the case of a small network, with the number of processes less than $32$ and
+%a low fault percentage---(approximately less than $10\%$), algorithm
+%\textit{EIG} performs better since it considers the number of faults in its
+%protocol. However, its performance degrades under high fault ratio. We show
+%that under high variance of network size over time if the increase in size is
+%within the next power of $2$, then for algorithm \textit{Pull-Push} the number
+%of bits sent per node remains the same. For networks with strict bandwidth
+%constraints, this allows high flexibility in changing the size of the
+%network. For high variance of fault ratios, algorithm \textit{Quorum} prevented
+%byzantine processes from influencing the communication complexity. Moreover,
+%we improve upon the results obtained for algorithm \textit{EIG} by making
+%certain changes in the algorithm itself---removing the redundant information
+%being sent in every round regarding the list of byzantine nodes. This further
+%%improves the number of bits sent in every round of the protocol.

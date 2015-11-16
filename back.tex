@@ -36,15 +36,52 @@ For empirical analysis, we also consider the following metric:
 \subsection{Previous work}
 
 \subsubsection{Deterministic Solutions}
-Fischer and Lynch \cite{Fischer81alower} proved that $k + 1$ is the round complexity in the worst case for a $k$-fault tolerant synchronous protocol. If the messages were not \textit{authenticated}, the message complexity was initially shown to be exponential in the number of process in \cite{PeaseSL80}. In 1998, Garay and Moses \cite{GarayM98}, with modifications to the two phase protocol of \cite{BDDS87} using the EIG data structure, improved the message complexity further to polynomial time. If authenticated messages were sent, Dolev and Reischuk \cite{DolevR85}, proposed an algorithm using $O(n + k^2)$ messages. In an attempt to lower the communication costs, researchers either lowered the fraction of faulty processes to a smaller number \cite{DRS90} or increased the maximum number of rounds needed in the worst case \cite{TPS87}. It was only recently that Kowalski et al. \cite{KM13} proposed a simple algorithm that holds for the optimal range and optimal number of communication rounds while lowering the communication complexity to $O(n^{3}logn)$.
+Fischer and Lynch \cite{Fischer81alower} proved that $k + 1$ is the round
+complexity in the worst case for a $k$-fault tolerant synchronous protocol. If
+the messages were not \textit{authenticated}, the message complexity was
+initially shown to be exponential in the number of process by Pease et
+al.~\cite{PeaseSL80}. In 1998, Garay and Moses \cite{GarayM98}, with
+modifications to the two phase protocol of Bar-Noy et al.~\cite{BDDS87} using
+the EIG data structure, improved the message complexity further to polynomial
+time. If authenticated messages were sent, Dolev and Reischuk \cite{DolevR85},
+proposed an algorithm using $O(n + k^2)$ messages. In an attempt to lower the
+communication costs, researchers either lowered the fraction of faulty
+processes to a smaller number \cite{DRS90} or increased the maximum number of
+rounds needed in the worst case \cite{TPS87}. It was only recently that
+Kowalski et al. \cite{KM13} proposed a simple algorithm that holds for the
+optimal range and optimal number of communication rounds while lowering the
+communication complexity to $O(n^{3}logn)$.
 
-\subsubsection{Randomized Solutions}
-Probabilistic solutions were proposed to circumvent the lower bounds on round and message complexity imposed by deterministic settings. They used the idea of a common coin, which was seen as `sufficiently random' by `sufficiently many' random processes. 
-In the asynchronous setting, using randomized algorithms, Ben-Or \cite{Ben-Or83} showed that if $k < n/5$, then consensus is achievable with probability $1$. Rabin \cite{Rabin83} showed constant expected round complexity if $k < n/4$. Greatly improved results have been shown in \cite{PCR14, KKKSS08, MHR14} for non-adaptive adversary and in \cite{KS13,AAKS14} for an adaptive adversary. Assuming that communication channels are \textit{private} between every pair of processes, the algorithm proposed in \cite{PR10} shows constant expected round complexity and $\tilde{O}(n^2)$ message complexity. These bounds are also applicable to the asynchronous setting. In \cite{HKK08}, the authors proved an $\Omega(\sqrt[3]{n})$ lower bound on both message complexity and round complexity for synchronous systems, under restrictive assumptions.
+\subsubsection{Randomized Solutions} Probabilistic solutions were proposed to
+circumvent the lower bounds on round and message complexity imposed by
+deterministic settings. They used the idea of a common coin which was seen as
+`sufficiently random' by `sufficiently many' random processes.  In the
+asynchronous setting, using randomized algorithms, Ben-Or \cite{Ben-Or83}
+showed that if $k < n/5$, then consensus is achievable with probability $1$.
+Rabin \cite{Rabin83} showed constant expected round complexity if $k < n/4$.
+Greatly improved results have been shown in \cite{PCR14, KKKSS08, MHR14} for
+non-adaptive adversary and in \cite{KS13,AAKS14} for an adaptive adversary.
+Assuming that communication channels are \textit{private} between every pair of
+processes, the algorithm proposed by Patra et al.~\cite{PR10} shows constant
+expected round complexity and $\tilde{O}(n^2)$ message complexity. These bounds
+are also applicable to the asynchronous setting. Holtby et al.~\cite{HKK08} 
+proved an $\Omega(\sqrt[3]{n})$ lower bound on both message complexity and
+round complexity for synchronous systems, under restrictive assumptions.
 
-\subsubsection{Almost-Everywhere Solutions}
-The almost-everywhere byzantine agreement problem was introduced by Dwork et al. in \cite{DPPU88}. It is a relaxed version of the byzantine agreement problem and requires all but $O(log^{-1}n)$ fraction of the processes to agree on a common output. For the algorithm in \cite{KSSV06}, the round and message complexities are shown to be poly-logarithmic in $n$. Construction of byzantine agreement from almost-everywhere byzantine agreement, called almost-everywhere reduction, was proposed in \cite{KS09,KLST11}, using $\tilde{O}(\sqrt{n})$ bits per process and poly-logarithmic number of rounds. 
-Papers like \cite{KLST11} used push-pull protocols, the complexity of which is dictated by the complexity of the first \textit{push} phase and the size of the candidate lists, i.e., the number of all possible outputs. The authors of \cite{BGH13} propose an almost-everywhere to everywhere solution using the almost-everywhere algorithm of \cite{KSSV06}.
+\subsubsection{Almost-Everywhere Solutions} The almost-everywhere byzantine
+agreement problem was introduced by Dwork et al.~\cite{DPPU88}. It is
+a relaxed version of the byzantine agreement problem and requires all but
+$O(log^{-1}n)$ fraction of the processes to agree on a common output. For the
+algorithm by King et al.~\cite{KSSV06}, the round and message complexities are shown to be
+poly-logarithmic in $n$. Construction of byzantine agreement from
+almost-everywhere byzantine agreement, called almost-everywhere reduction, was
+proposed in \cite{KS09,KLST11}, using $\tilde{O}(\sqrt{n})$ bits per process
+and poly-logarithmic number of rounds.  Papers such as those by King et al.~\cite{KLST11} used
+push-pull protocols, the complexity of which is dictated by the complexity of
+the first \textit{push} phase and the size of the candidate lists, i.e., the
+number of all possible outputs. Braud-Santoni et al.~\cite{BGH13} propose an
+almost-everywhere to everywhere solution using the almost-everywhere algorithm
+by King et al.~\cite{KSSV06}.
 
 %\begin{table}[h]
 %    \resizebox{\columnwidth}{!}{%
@@ -78,8 +115,44 @@ Papers like \cite{KLST11} used push-pull protocols, the complexity of which is d
 %\end{table}
 
 
-\subsubsection{Experimental Evaluations}
-Many surveys have reported various theoretical results for the Byzantine Agreement problem. In a recent paper by Vavala et al.~\cite{VN12} that implements Bracha's algorithm \cite{Bracha84} to bridge the gap between theory and practice, it was reported that the literature is poor in the experimental evaluations of byzantine agreement algorithms. They showed that Bracha's algorithm terminates in constant rounds if only crash failures occur and under normal conditions, whereas theoretically it takes exponential number of rounds to terminate due to the worst-case scenario. They use an averaging method, approximations and stochastic techniques for analysis of the protocol. They ran the experiments for up to 100 processes and reported the round complexity results. Oluwasanmi, Saia, and King \cite{OSK10} improve upon the algorithm from \cite{KS09} that was shown to be impractical when implemented due to large hidden constants, although, they weaken the control of the adversary to only $1/8$ fraction of the processes. They implement and compare their algorithm with Cachin et al.'s \cite{CKS05} with the size of the network simulated between $10^3$ to $4\times10^6$ processors. They used average number of messages and bits sent per process as well as latency for comparison. Moniz et al.~\cite{MNCV06} perform experimental evaluations on Bracha's algorithm~\cite{Bracha84} and Cachin et al.'s~\cite{CKS05}. However, significantly better results to both Bracha's and Cachin et al.'s algorithms have been shown by Vavala et al.~\cite{VN12} and Oluwasanmi et al.~\cite{OSK10}, respectively. Liang et al.~\cite{LSV12} implemented and analyzed three different byzantine broadcast algorithms for fault-tolerant state machine protocols 1) the classic solution by Pease et al. \cite{PeaseSL80}, 2) a practical BFT protocol by Castro and Liskov \cite{CL02}, and 3) a network coding based BFT that they propose in the paper. For state replication protocols, it is important for processes to agree upon an order to process the requests. In this experimental evaluation, the authors concentrated on the implementation and analysis of the byzantine broadcast part of the algorithm that is used to reach consensus on the order of requests to be processed by the state machines. They reported the latency when the batch size of the requests to $4$ servers is varied. Other work such as \cite{MNC10} and \cite{MNCV11} consider wireless and asynchronous settings, respectively, which is outside the scope of this paper.
+\subsubsection{Experimental Evaluations} Many surveys have reported various
+theoretical results for the Byzantine Agreement problem. In a recent paper by
+Vavala et al.~\cite{VN12} that implements Bracha's algorithm \cite{Bracha84} to
+bridge the gap between theory and practice, it was reported that the literature
+is poor in the experimental evaluations of byzantine agreement algorithms. They
+showed that Bracha's algorithm terminates in constant rounds if only crash
+failures occur and under normal conditions, whereas theoretically it takes
+exponential number of rounds to terminate due to the worst-case scenario. They
+use an averaging method, approximations and stochastic techniques for analysis
+of the protocol. They ran the experiments for up to 100 processes and reported
+the round complexity results. Oluwasanmi et al.~\cite{OSK10} improve
+upon the algorithm by King et al.~\cite{KS09} that was shown to be impractical when
+implemented due to large hidden constants, although, they weaken the control of
+the adversary to only $1/8$ fraction of the processes. They implement and
+compare their algorithm with Cachin et al.'s \cite{CKS05} with the size of the
+network simulated between $10^3$ to $4\times10^6$ processors. They used average
+number of messages and bits sent per process as well as latency for comparison.
+Moniz et al.~\cite{MNCV06} perform experimental evaluations on Bracha's
+algorithm~\cite{Bracha84} and Cachin et al.'s~\cite{CKS05}. However,
+significantly better results to both Bracha's and Cachin et al.'s algorithms
+have been shown by Vavala et al.~\cite{VN12} and Oluwasanmi et
+al.~\cite{OSK10}, respectively. Liang et al.~\cite{LSV12} implemented and
+analyzed three different byzantine broadcast algorithms for fault-tolerant
+state machine protocols (1) the classic solution by Pease et al.
+\cite{PeaseSL80}, (2) a practical BFT protocol by Castro and Liskov \cite{CL02},
+and (3) a network coding based BFT that they propose in the paper. For state
+replication protocols, it is important for processes to agree upon an order to
+process the requests. In this experimental evaluation, the authors concentrated
+on the implementation and analysis of the byzantine broadcast part of the
+algorithm that is used to reach consensus on the order of requests to be
+processed by the state machines. They reported the latency when the batch size
+of the requests to $4$ servers is varied. Other works such as those by Moniz et
+al.~\cite{MNC10, MNCV11} consider wireless and asynchronous settings,
+respectively, which is outside the scope of this paper.
 
-Most of these experimental evaluations have either used a synchronous model or a partially synchronous model for simplicity. The algorithms we have chosen allow us to differentiate and compare different randomized as well as deterministic algorithms which makes it necessary to use a synchronous setting due to the impossibility results for the asynchronous case \cite{FischerLP83}. 
+Most of these experimental evaluations have either used a synchronous model or
+a partially synchronous model for simplicity. The algorithms we have chosen
+allow us to differentiate and compare different randomized as well as
+deterministic algorithms which makes it necessary to use a synchronous setting
+due to the impossibility results for the asynchronous case \cite{FischerLP83}. 
 

@@ -26,8 +26,7 @@ processes $(n)$ lies in the range $4$ to $64$ on a cluster of $1$ to $16$
 machines. The number of failures $(f)$ lies in the range $[0, n/3)$ for
     algorithms \textit{Pull-Push} and \textit{EIG}, and in the range $[0, n/4)$
         for algorithm \textit{Quorum}. The algorithms have been shown to be
-        correct only in these respective ranges \cite{BGH13}, \cite{KM13},
-        \cite{BPV06}. 
+        correct only in these respective ranges \cite{BGH13,KM13,BPV06}. 
 
 \subsection{Authentication of processes} It was assumed that the channels are
 authenticated and each receiving entity knows the identity of the sender. The
@@ -69,7 +68,8 @@ buffer.
 
 
 \subsection{Kinds of byzantine failures} \label{sec:behavior} A process can
-display either of the following failures: \textit{Active failures:}
+display either of the following failures: \\
+\textit{Active failures:}
 \begin{itemize} \item Processes send conflicting data to different processes in
             the same round. Any data that is not the same or is null is said to
             be conflicting.  \item Processes send arbitrary content or more
@@ -102,7 +102,7 @@ a process failure and the other processes proceeded with the next phase.
 %that allowed alive processes to finish the phase with high probability. 
 An alternative to this method was sending an acknowledgement back for each
 received message, but we refrained from using this method since that meant
-dealing with twice the number of messages, which added unnecessary overhead for
+dealing with twice the number of messages which added unnecessary overhead for
 our testing purposes. 
 
 \subsection{Message format} Each message sent over the network was an array of
@@ -118,7 +118,7 @@ The format of the $\mathtt{MESSAGE}$ varied for each of the algorithms.
 
 \section{Results} \label{sec:results}
 
-\subsection{Bit Complexity} For the \textit{EIG} algorithm, from Fig.
+\subsection{Bit Complexity} For the \textit{EIG} algorithm, from Figure
 \ref{fig:eig}, we can see that as the network size increases the bit complexity
 increases as a cubic function in accordance with the theoretical Big `O'
 complexity of $O(n^3 logn)$, where $n$ is the size of the network. This is
@@ -143,7 +143,7 @@ consumption can be affected greatly.   \begin{figure}[ht] \centering
 %\caption{Consensus results for EIG algorithm} \label{fig:eignolog}
 %\end{figure}
 For the \textit{Pull-Push} algorithm, as the network size increases the bit
-complexity displays a poly-logarithmic growth. This can be seen in Fig.
+complexity displays a poly-logarithmic growth. This can be seen in Figure 
 \ref{fig:pull_push}. The growth trend is similar for all fault ratios for small
 and larger networks. The increase in number of failures has an effect on the
 number of bits sent per process but only by a constant factor. This can be
@@ -181,14 +181,14 @@ the influence the (already high) communication cost greatly.
 Each of our algorithms for every configuration was run multiple times. In the
 analysis, each data point is an average over $5$ independent runs and we
 obtained confidence intervals for each of them. The confidence interval for
-algorithm \textit{Pull-Push} was $\pm 1\%$, for algorithm \textit{EIG} - $\pm
+algorithm \textit{Pull-Push} was $\pm 1\%$, for algorithm \textit{EIG}---$\pm
 0.1\%$, and $\pm 0.5\%$ for algorithm \textit{Quorum}.
 
 \subsection{Comparison for bit complexity} For large networks ($n > 64$), we
 vary the ratio of failures to the number of processes ($f/n$), which lies in
 the range $[0, 1/3)$ for algorithms \textit{EIG} and \textit{Pull-Push}, and in
     the range $[0, 1/4)$ for algorithm \textit{Quorum}.  As can be seen from
-        Fig. \ref{fig:comp}, the algorithm \textit{Pull-Push} performs much
+        Figure \ref{fig:comp}, the algorithm \textit{Pull-Push} performs much
         better than the other algorithms for any fault percentage.
 
         Next, we modify the \textit{EIG} protocol a little to require that
@@ -226,12 +226,12 @@ the range $[0, 1/3)$ for algorithms \textit{EIG} and \textit{Pull-Push}, and in
     high \% of failures} \label{fig:fault25} \end{figure}
 
 For small networks ($n < 40$), if the fault ratio is small and in the range
-$[0, 1/15)$, Fig. \ref{fig:fault5} shows that algorithm \textit{EIG} performs
+$[0, 1/15)$, Figure~\ref{fig:fault5} shows that algorithm \textit{EIG} performs
     much better than any of the other algorithms. This is simply because only
     the first three rounds of this algorithm will be executed and since the
     ratio is small, a simple broadcast is sufficient to gather all the
     information. \textit{Pull-Push} and \textit{Quorum}, which are more complex
-    algorithms, perform worse in such scenarios. Fig. \ref{fig:fault25} shows
+    algorithms, perform worse in such scenarios. Figure~\ref{fig:fault25} shows
     that for higher fault ratios and any network size, algorithm
     \textit{Pull-Push} performs better.
 
@@ -248,7 +248,7 @@ $[0, 1/15)$, Fig. \ref{fig:fault5} shows that algorithm \textit{EIG} performs
 
 %The difference in the number of messages sent for the two mechanisms can be
 %seen in Fig. \ref{fig:opt}.  \begin{figure}[h] \centering
-%\includegraphics[scale=0.55]{optimized} \caption{ EIG algorithm when messages
+%\includegraphics[scale=0.45]{optimized} \caption{ EIG algorithm when messages
 %are grouped before sending} \label{fig:opt} \end{figure}
 
 \subsection{Round Complexity} Round complexity is the number of phases that
@@ -322,7 +322,7 @@ ratios.
 %processing of each subprotocol is not possible, algorithm Quorum does not give
 %good performance.
 %
-%\begin{figure}[h] \centering \includegraphics[scale=0.55]{time_nopar}
+%\begin{figure}[h] \centering \includegraphics[scale=0.45]{time_nopar}
 %\caption{Time Complexity comparison no parallel execution}
 %\label{fig:time_nopar} \end{figure}
 

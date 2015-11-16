@@ -24,11 +24,13 @@ Distributed Systems}
 \begin{abstract} Reaching agreement in the presence of byzantine processes is
     an important task in distributed systems. Theoretical analysis of
     algorithms for Byzantine Agreement can provide insight into their
-    efficiency.  However, these algorithms can have large hidden constants,
-    making them impractical for use in a real system. We compare the
-    performance of two randomized byzantine agreement algorithms---one using the
-    {\em pull-push} approach and another using the concept of {\em quorums}---and 
-    a third recent simple deterministic byzantine agreement algorithm.
+    efficiency.  However, analysis of algorithms under varying parameters and
+    practical constraints through experimental evaluation can be key to
+    understanding the performance and trade-offs of theoretically
+    well-performing algorithms.  We compare the performance of two randomized
+    byzantine agreement algorithms---one using the {\em pull-push} approach and
+    another using the concept of {\em quorums}---and a third recent simple
+    deterministic byzantine agreement algorithm.
     Through implementation on a testbed environment using the metrics of {\em
     bit} complexity, {\em round} complexity and {\em latency} in the presence
     of network sizes and faulty processes, we quantify the performance of each
