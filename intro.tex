@@ -7,14 +7,16 @@ distributed systems. In essence, the problem deals with multiple processes,
 each with an initial opinion, cooperating with each other to reach agreement.
 The motivation for this problem arises from real-world use cases such as database
 transactions, where a number of systems need to agree on whether to commit or
-abort a transaction, or in aircraft controllers, for example, the Dragon flight system~\cite{dfs}, that need to agree on which
-plane should take-off or land first. In the case of the latter, where the
-system is safety-critical, it is essential that the aircraft controllers reach
-an agreement within a bounded period of time and that all the controllers
-arrive at the same decision, whereas in the case of the former, it is only
-necessary that the system eventually reaches an agreement. Therefore, any
-consensus reaching algorithm needs to satisfy certain correctness conditions
-that are formally given as follows \cite{PeaseSL80}:
+abort a transaction, in aircraft controllers that need to agree on which plane
+should take-off or land first, or in examples such as the Dragon flight
+system~\cite{dfs}, a reuasable aircraft, where it is required to be
+a fault-tolerant system for when it gets close to the ISS. In the case of the
+latter, where the system is safety-critical, it is essential that the aircraft
+controllers reach an agreement within a bounded period of time and that all the
+controllers arrive at the same decision, whereas in the case of the former, it
+is only necessary that the system eventually reaches an agreement. Therefore,
+any consensus reaching algorithm needs to satisfy certain correctness
+conditions that are formally given as follows \cite{PeaseSL80}:
 
 \begin{itemize} \item \textit{Consistency}: All correct processes agree on the
         same value and all the decisions are final.  
@@ -49,8 +51,8 @@ assumption that the links do not display any kind of fault, one needs to
 analyze scenarios in the case of process failures. Generally, the kind of
 failures that a process can encounter is either a \textit{fail-stop} failure or
 a \textit{Byzantine failure}. Fail-stop failures occur when processes fail by
-stopping. In the case of a byzantine failure, the processes fail by acting
-maliciously. Depending on the ratio of faulty processes to all the processes,
+stopping. In the case of a byzantine failure, the processes fail 
+arbitrarily. Depending on the ratio of faulty processes to all the processes,
 consensus may be impossible even when the system is synchronous. The problem of
 solving consensus in the presence of byzantine failures is known as the
 Byzantine Agreement problem~\cite{LamportSP82}. With the increasing number of
@@ -58,7 +60,7 @@ malicious attacks reported in recent times and software bugs leading to
 processes behaving arbitrarily, dealing with this problem has become more
 important than ever before.
 
-\subsection{The Need for Experimental Evaluation}
+\subsection{Need for Experimental Evaluation}
 
 In the past, researchers have tried to optimize either the \textit{message}
 complexity or the \textit{round} complexity of algorithms in the worst case
@@ -92,7 +94,7 @@ through experimental evaluation can be key to understanding the performance of
 theoretically well-performing algorithms.  While some applications require best
 performance for either only number of bits required for
 communication or for the number of rounds taken to reach consensus, most
-applications \cite{YJC} require optimal results for both---size and number of
+applications \cite{YJC} require optimal results for both size and number of
 faults in the application. A comparison, therefore, of performant algorithms is
 necessary to understand how they perform with respect to each other. A way to
 achieve this is by selecting state-of-the-art algorithms having different
@@ -112,7 +114,7 @@ The third is a deterministic algorithm, due to Kowalski et
 al. \cite{KM13}, which we refer to as algorithm \textit{EIG} (Exponential
 Information Gathering). 
 
-\subsection{Motivation for the Chosen Algorithms}
+\subsection{Motivation for Chosen Algorithms}
 
 A vast amount of work has been done over the years to solve the Byzantine
 Agreement problem, and different approaches have been taken for various models
@@ -131,7 +133,7 @@ reactive systems that are safety-critical require determinism which is the
 target of synchronous programs~\cite{MVF00, LH94}.
 
 
-Algorithm \textit{Pull-Push}, is one of the most recent and best-known result
+Algorithm \textit{Pull-Push}, is one of the most recent and best-known results
 in terms of communication complexity. The main contribution of the paper has
 been to give an almost-everywhere to everywhere solution, which improves the
 amortized communication complexity to $\tilde{O}(1)$ per
@@ -146,8 +148,8 @@ complexity, which is poly-logarithmic in the size of the network.
 
 This trade-off between communication and round complexity motivated us to pick
 the algorithm \textit{quorum} for comparison. This algorithm, due to Ben-Or et
-al., has a round complexity of $O(logn)$ although it shows a quasi-polynomial
-communication complexity of $n^{O(logn)}$.  It uses the same setting as
+al., has a round complexity of $O(\log n)$ although it shows a quasi-polynomial
+communication complexity of $n^{O(\log n)}$.  It uses the same setting as
 \textit{Pull-Push} and makes use of the well-known Feige's protocol of
 collective coin-flipping to decide on a small committee with the same fraction
 of good processes as in the whole network, which then runs a leader election
@@ -168,7 +170,7 @@ al.~\cite{GarayM98} that meets the bounds on the optimal range of Byzantine
 processes and communication rounds. Further, we make modifications
 to this algorithm by removing the redundant information being sent in every round
 regarding the list of byzantine nodes to show an improvement in the
-communication complexity. 
+communication complexity. We call this algorithm \textit{ImprovedEIG}.
 
 
 We vary two parameters to define the workload of the system---the number of

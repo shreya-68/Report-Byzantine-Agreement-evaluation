@@ -1,0 +1,66 @@
+\documentclass[a4paper]{article}
+\usepackage{color}
+\title{Revisions for Paper Titled `A Performance Comparison of Algorithms for
+Byzantine Agreement in Distributed Systems'}
+
+
+\begin{document}
+\maketitle
+
+We thank the reviewers for their constructive feedback. Within the context of space limitations and the short revision turnaround time, we have made improvements to the paper based on their suggestions. Below we provide our responses to the individual issues raised by the reviewers together with the revisions that we have made to the paper.
+
+\section{Detailed Responses to Reviewers' Comments}
+\subsection{Review 1}
+
+\textbf{Issue 1:} What kinds of active failures are injected and how are the crash failures injected? \\
+\textbf{Our response:} We have added the following text to Section IV-H for a more detailed explanation:
+\begin{itemize}
+\item For analysis of active failures, we inject both of the above
+mentioned failures, i.e., processes send conflicting data as well
+as attempt to flood the network.
+\item For analysis of inactive failures, crashed processes remain
+silent and stop sending messages to emulate node crash.
+\end{itemize} 
+\textbf{Issue 2:} The claims made for Fig. 3 are not clear considering it is in the log scale. \\
+\textbf{Our response:} We have changed the vertical scale of Fig. 3 from log scale to linear scale for more clarity. While doing so we realized that the plot in the previous graph had reversed values from $0\%$ to $25\%$ with old values from an older graph that we had forgotten to update -- this has now been corrected including the linear scale. Note that the text remains unchanged since it always corresponded to the correct graph.\\
+
+\noindent \textbf{Issue 3:} The claims made for Fig. 1 are not clear considering it is in the log scale. \\
+\textbf{Our response:} We have modified and added to the explanation for Fig. 1 in Section V-A specifically for when the bit complexity is observed at log scale. We have also revised this part to say that increasing the fault ratio will affect the bandwidth consumption linearly for all network sizes.\\
+
+\noindent \textbf{Issue 4:} More explanation is required for Fig. 7 and Fig. 8.\\
+\textbf{Our response:} We have added an explanatory paragraph at the end of Section V-C.
+
+\subsection{Review 2}
+\textbf{Issue 1:} If the assumptions and testbed adopted by the authors are realistic enough and cover the majority of real systems. \\
+\textbf{Our response:} Our assumptions hold as they are the same (original) assumptions made in the synchronous algorithms we have studied. No new assumptions have been introduced in the implementation that are not assumed in the original algorithm. Along with this, detailed motivation for the chosen algorithms is included in Section I-B.
+
+\begin{enumerate}
+\item[i] \textbf{Comment:} FIFO channels have been considered which is unrealistic.\\
+\textbf{Our response:} All of the algorithms we have studied contain the original assumptions of requiring a reliable synchronous point to point channel. Thus, FIFO channels operate under the TCP protocol that preserves the order of messages and conforms with the original assumption.
+\item[ii] \textbf{Comment:} The system is considered synchronous, fully-connect, and with synchronized clocks which is not the case for current large scale systems like internet.\\
+\textbf{Our response:} Our study scales systems up to 64 processes. Scaling up further makes \textit{consensus} increasingly difficult to achieve, especially if we want to compare deterministic Byzantine Agreement algorithms with the randomized ones. 
+\item[iii] \textbf{Comment:} Message authentication is not required.\\
+\textbf{Our response:} This same assumption is made in the original algorithms. It is realistic to make this assumption since in majority of the scenarios, the receiver knows the identity of the sender.
+\item[iv] \textbf{Comment:} Nodes communicate using TCP protocol instead of UDP.\\
+\textbf{Our response:} Since consensus is known to be impossible to achieve in the case of link failures or message loss at the link, we consider a reliable method of communication, i.e., TCP. Please also see our response to your comment in (i) above.
+\item[v] \textbf{Comment:} The set of byzantine nodes are fixed at the starting of the protocol.\\
+\textbf{Our response:} The algorithms make the assumption of a non-adaptive adversary which is realistic in systems where the churn-rate is not high.
+\end{enumerate}
+
+\noindent \textbf{Issue 2:} Message timing failure is not considered.\\
+\textbf{Our response:} Such failures essentially correspond to the message being available to the receiver within a specified time interval. We have not explicitly evaluated these failures mainly because a popular method in implementations to detect crash failures is using timeout mechanisms as explained in Section IV-I. If the message fails to reach the receiver within a certain time interval, it is considered to have crashed for the rest of the protocol. This indirectly encompasses timing failures where a process takes too long to send a message within this time interval. \\
+
+\noindent \textbf{Issue 3:} Well-known byzantine agreement algorithms like PBFT or Zyssyva have not been evaluated. \\
+\textbf{Our response:} Zyzzyva has not been implemented since it is primarily a state machine replication protocol with an agreement sub-protocol. The agreement protocol is not a protocol where the replicas themselves reach an agreement but instead where the client receives responses from the replicas and comes to a conclusion. This is unlike the algorithms we consider which do not rely on a central authority.
+
+PBFT is a state machine replication protocol as well (and one for asynchronous systems) in which the request message communication occurs only between the primary or the client and the replicas. The replicas only communicate amongst each other essentially to check that the result of the request they execute is the same as the result of a certain number of other processes. Since a trusted party (the client) exists which eventually allows the correct request to reach the non-faulty replicas, the PBFT Byzantine Agreement protocol is not in the same category as the ones we have considered.
+
+\subsection{Review 3}
+\textbf{Issue 1:} ``worst case scenario" is given a probability of ``0" which is debatable. \\
+\textbf{Our response:} We would like to clarify that in Section I-B we state in the probabilistic techniques that ``the worst-case scenarios can be eliminated by
+giving them a probability of 0''. However, the implementation and analysis of all three algorithms does in fact consider the performance of the algorithms in the worst-case scenario, i.e., the maximum number of allowed fault ratios.
+
+\subsection{Additional Revision}
+In addition to the revisions mentioned above, we have revised the description of algorithms \textit{Quorum} and \textit{Pull-push} in the Appendix to make it more informative and focused. For algorithm {EIG}, finer details about how the values of the nodes of the EIG tree are updated have been added to Section III-D3.
+ 
+\end{document}

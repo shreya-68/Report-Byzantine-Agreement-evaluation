@@ -1,4 +1,5 @@
-﻿\section{Algorithms}
+﻿\section{Algorithms
+\protect\footnote{The algorithms, theorems and protocols presented in this paper have been reproduced or condensed from works by Ben-Or et al.~\cite{BPV06}, Kowalski et al.~\cite{KM13} and Braud-Santoni et al.~\cite{BGH13}.}}
 \label{sec:algos}
 
 %\begin{table*}[t]
@@ -18,13 +19,13 @@
 \begin{table*}[t]
     \caption{A summary of features of the algorithms under evaluation}
     \scriptsize
-        \setlength{\tabcolsep}{3pt}
-    \begin{tabular}{p{1.5cm}llp{1.4cm}p{1.3cm}p{1.2cm}p{1.4cm}p{1.2cm}}
+    %\begin{tabular}{p{1.5cm}llp{1.4cm}p{1.3cm}p{1.2cm}p{1.4cm}p{1.2cm}}
+        \begin{tabular}{p{2.5cm}llllp{1.5cm}p{3.5cm}p{2cm}}
 \hline
 \textbf{Algorithm} & \textbf{Type} &\textbf{n} & \textbf{Rounds} & \textbf{Bit Complexity } &\textbf{Decision value} & \textbf{Commun\-icating nodes}& \textbf{Remarks} \\ \hline
-Ben-Or, Pavlov, Vaikuntanathan \cite{BPV06} (\textit{Quorum})& Randomized & $4k + 1$ & $O(logn)$ & $n^{O(logn)}$      &String of $O(logn)$ bits &All-to-all communication and within quorums of size $O(logn)$   & Everywhere byzantine agreement     \\
-          Braud-Santoni et al. \cite{BGH13} (\textit{Pull-Push}) & Randomized & $3k + 1$ & $O(\frac{logn}{log\; log n})$ & $\tilde{o}(n)$      &String of $O(logn)$ bits &With samplers of size $O(logn)$  & Almost-everywhere to everywhere     \\
-                Kowalski and Mostefaoui \cite{KM13} (\textit{EIG}) & Deterministic & $3k + 1$     & $k + 1$                     & $O(n^3logn)$ &Single bit  &All-to-all communication & Uses EIG data structure\\ \hline
+Ben-Or, Pavlov, Vaikuntanathan \cite{BPV06} (\textit{Quorum})& Randomized & $4k + 1$ & $O(\log n)$ & $n^{O(\log n)}$      &String of $O(\log n)$ bits &All-to-all communication and within quorums of size $O(\log n)$   & Everywhere byzantine agreement     \\
+          Braud-Santoni et al. \cite{BGH13} (\textit{Pull-Push}) & Randomized & $3k + 1$ & $O(\frac{\log n}{log\; log n})$ & $\tilde{o}(n)$      &String of $O(\log n)$ bits &With samplers of size $O(\log n)$  & Almost-everywhere to everywhere     \\
+                Kowalski and Mostefaoui \cite{KM13} (\textit{EIG}) & Deterministic & $3k + 1$     & $k + 1$                     & $O(n^3\log n)$ &Single bit  &All-to-all communication & Uses EIG data structure\\ \hline
 %
 \end{tabular}
 \end{table*}
@@ -37,20 +38,21 @@ Our model is a \textit{fully-connected} network of $n$ processes, with authentic
 \subsection{Adversary}
 The adversary controls a fraction of the processes---a maximum of $k$ processes, which are called \textit{byzantine} processes. Such processes deviate arbitrarily from the algorithm by crash failures or sending false messages. The assumption is that the adversary is \textit{non-adaptive} for all three algorithms, that is, the adversary chooses the set of byzantine processes at the start of the protocol. The adversary is computationally unbounded and has \textit{full information} about the state of all processes and the network, and the communication between any pair of them. Another characteristic is that the adversary is \textit{rushing}. This means that the adversary knows all the messages sent by the good processes in all the previous rounds and the current round before choosing which messages to send in the current round. This is also known as the \textit{full information} model \cite{GGL98}.
 
-\subsection{Input string}
+\subsection{Input String}
 Both the algorithms \textit{Quorum} and \textit{Pull-Push}  make use of a string of bits as the final decision. However, algorithm \textit{EIG} uses a single bit as input and output decision value.
 
 
-\subsection{Algorithms\protect\footnote{The algorithms and protocols presented here have been reproduced or condensed from works by Ben-Or et al.~\cite{BPV06}, Kowalski et al.~\cite{KM13} and Braud-Santoni et al.~\cite{BGH13}.}}
+\subsection{Algorithms}
 
 \subsubsection{Algorithm Quorum\cite{BPV06}}
 The main result of this algorithm, due to Ben-Or et al., is as follows:
 \begin{theorem}
-For any constant $\epsilon > 0$, there exists a protocol $\mathcal{P}$ that reaches Byzantine Agreement in a synchronous full-information network tolerating $k < (1/4 - \epsilon) n$ non-adaptive Byzantine faults, and runs for expected $O(logn/\epsilon^2)$ rounds. 
+For any constant $\epsilon > 0$, there exists a protocol $\mathcal{P}$ that reaches Byzantine Agreement in a synchronous full-information network tolerating $k < (1/4 - \epsilon) n$ non-adaptive Byzantine faults, and runs for expected $O(\log n/\epsilon^2)$ rounds. 
+\hfill\qedsymbol
 \end{theorem}
 The algorithm makes use of a weaker version of broadcast known as \textit{Graded Broadcast} or \textit{Gradecast} \cite{FM97}, with a designated authority called the `dealer', who wants to broadcast a value $v$. At the end of the protocol, every process outputs a value and a number that denotes the confidence of the process in that value. If the dealer is honest, every honest process outputs the same value with full confidence. 
 
-The quorum protocol proceeds in stages. It makes use of Feige's protocol \cite{Feige99} for collective coin-flipping which works as follows: in the first round, all the processes throw a ball at random into one of $O(n/log\;n)$ bins. The processes which throw their ball into the \textit{lightest bin} (bin with least number of balls) survive. The protocol is invoked recursively on the $O(log\;n)$ processes in the lightest bin. Agreement on the lightest bin is achieved by running \textit{sub-protocols} among every subset of processes of size $\frac{3}{4}logn$. These sub-protocols can be executed in parallel since the decision of one does not affect the other.
+The quorum protocol proceeds in stages. It makes use of Feige's protocol \cite{Feige99} for collective coin-flipping which works as follows: in the first round, all the processes throw a ball at random into one of $O(n/log\;n)$ bins. The processes which throw their ball into the \textit{lightest bin} (bin with least number of balls) survive. The protocol is invoked recursively on the $O(log\;n)$ processes in the lightest bin. Agreement on the lightest bin is achieved by running \textit{sub-protocols} among every subset of processes of size $\frac{3}{4}\log n$. These sub-protocols can be executed in parallel since the decision of one does not affect the other.
 
 The key idea is that honest processes are unbiased and the resulting bin will contain a large fraction of honest processes. After $log^* n$ invocations of the process, a leader is elected. The leader then flips a coin, and broadcasts it, which is the agreed value. The challenge is that dishonest processes will exhibit byzantine behavior when throwing their ball into one of the bins by sending conflicting values to different processes. This is overcome by using the \textit{gradecast} protocol described earlier. 
 
@@ -62,7 +64,8 @@ This algorithm by Braud-Santoni et al. \cite{BGH13} is the first probabilistic B
 For $n$ processes in an asynchronous full-information message passing model with a non-adaptive Byzantine adversary which controls less than a $1/3 - \epsilon$ fraction of the processes, if more than $3/4$ of the processes know a string $g_{\mathtt{string}}$ (random enough), there is an algorithm such that with high probability:
 \begin{itemize}
 \item At the end of the algorithm, each correct process knows $g_{\mathtt{string}}$.
-\item The algorithm takes $O(\frac{logn}{log \; logn})$ rounds and $\tilde{O}(n)$ messages are exchanged in total. 
+\item The algorithm takes $O(\frac{\log n}{log \; \log n})$ rounds and $\tilde{O}(n)$ messages are exchanged in total. 
+\hfill\qedsymbol
 \end{itemize}
 \end{theorem}
 
@@ -72,8 +75,10 @@ The algorithm makes use of \textit{quorums} to filter requests or messages sent 
 Each process starts with a candidate string (the string to be agreed upon). The assumption is that more than half of the processes are both correct and have the same candidate string. The algorithm proceeds in two phases. In each of the phases, messages are sent only to selectively chosen processes or are received from selectively chosen processes by sampler functions.
 
 \textbf{Push Phase:} In the first phase, each process starts to \textit{diffuse} (send) its candidate string $g_{\mathtt{string}}$. A push occurs when a process receives information about their candidate string from other processes without asking for it. To each pair of string $s$ and process $x$, the push quorum $I(x,s)$ assigns a set of $O(log\;n)$ processes. $x$ may receive pushes for $s$ from processes in $I(x,s)$ only. If more than half of the processes of $I(x,s)$ push for $s$, $s$ is added to $x$'s candidate list $L_x$. 
+We refer the reader to Algorithm \ref{alg:push} in the Appendix for details.
  
 \textbf{Pull Phase:} In the second phase, called the pull phase, the bogus strings are discarded so that each process keeps only the correct string. This is done by each process requesting the strings it received in the push phase to be verified by some other processes. A \textit{pull} query is sent out to receive information about each string as a consequence. Checking a string $s$ involves a Poll List $J(x, r_x)$ and a Pull Quorum $H(x, s)$, where $r_x$ is chosen at random. 
+Algorithms \ref{alg:send_pull}, \ref{alg:rout_pull} and \ref{alg:ans_pull} in the Appendix give a detailed implementation of the sending, routing and answering of pull requests.
 
 \subsubsection{Algorithm EIG \cite{KM13}}
 This protocol, similar to the classic protocol by Bar-Noy et al.~\cite{Bar-NoyD91}, has two phases. In the first phase, each process communicates with every other process for $k + 1$ rounds and stores the collected information in each round at a corresponding level in a tree-like data structure. In the second phase, a bottom-up evaluation is done on each of the trees at each process. The fundamental difference between this protocol and past EIG solutions is that after a couple of rounds, instead of storing and sending proposed values at each level of the tree, only an array of suspected byzantine processes is sent. This array is updated after each round using what is known as the confirmation mechanism that works as follows:
@@ -84,13 +89,43 @@ This protocol, similar to the classic protocol by Bar-Noy et al.~\cite{Bar-NoyD9
     \end{itemize}
 %In round $1$ of the first phase, proposed values are sent to all other processes. In the second round, values received in the previous round are echoed to all other processes. Using the confirmation mechanism a byzantine list is created. In round $3$, the echoed messages from round $2$ are sent along with the byzantine list as the main information and the byzantine list is again updated. In the subsequent rounds, 
     The following is the description of the rounds $1$ to $k+1$ of the protocol: \\
-    \textbf{Round 1} Each process sends its proposed value to all other processes. \\
-    \textbf{Round 2} Each process echoes the messages received in the first round.
-    The confirmation mechanism is applied to the received echoed messages by each process $p_i$, and whichever process' main information is not confirmed in this round it is added to $p_i$'s byzantine list. \\
-    \textbf{Round 3} The echoed messages received in round $2$ are sent as echo messages and the suspected byzantine list is sent as the main information. Confirmation mechanism is applied to the echoed information and the byzantine list is updated. \\
-    \textbf{Round r, ($4 \leq r \leq k+1$)} From 4th round onwards the suspected byzantine list of a process is sent as its main information and byzantine lists received in the previous round are echoed. Confirmation mechanism is applied to the received echo information and the suspected byzantine list is once again updated.
+    \textbf{Round 1} Each process sends its proposed value to all other processes. $\mathtt{val(x)}$ is set to the received value $v$ from process $x$ where $\mathtt{val}$ is a variable of nodes at level $1$ of the EIG tree. \\
+    \textbf{Round 2} Each process echoes the messages received in the first round. The received messages are set as the value of variable $\mathtt{cval}$ of nodes at level $2$. For a node $x = jk$, $\mathtt{cval(x)} = v$ where $v$ is the value that process $p_k$ reports that it received from $p_j$ in the previous round. The confirmation mechanism is applied to the received echoed messages by each process $p_i$. The process whose main information is not confirmed in this round is added to $p_i$'s byzantine list. \\
+    \textbf{Round 3} The echo messages received in round $2$ are sent as echo messages again. The suspected byzantine list is sent as the main information. Confirmation mechanism is applied to the echoed information and the byzantine list is updated in each round from here on. \\
+    \textbf{Round r, ($4 \leq r \leq k+1$)} From the 4th round onwards, the suspected byzantine list of a process is sent as its main information and byzantine lists received in the previous round are echoed. Nodes at corresponding levels of the EIG tree from round 3 onwards, for each process $p_i$, are given values for $\mathtt{val}$ and $\mathtt{cval}$ as follows:
+    \begin{itemize}
+        \item For node $x=ykl$, $\mathtt{val(x)} = \top$, if $p_l$ never reported to $p_i$ by round $k$ that it suspects $p_k$, else $\mathtt{val(x)} = \bot$.
+        \item For node $x=yjkl$, $\mathtt{cval(x)} = \top$, if $p_l$ never reported to $p_i$ by round $k+1$ that $p_k$ suspects $p_j$, else $\mathtt{cval(x)} = \bot$.
+        \item For leaf nodes $x = ykl$, $\mathtt{val(x)} = \top$, if $p_l$ did not report to $p_i$ that it suspects $p_k$, else $\mathtt{val(x)} = \bot$.
+    \end{itemize}
+where $y$ is a string of ids (possibly empty), and $j, k, l$ are ids of three different processes.
 
-The important point to note here is that the new information received in every round remains quadratic allowing us to use arrays to store this information. Additionally, the size of the echoed messages remains quadratic in every round. 
+ An important point to note here is that in every round even though the number of nodes in the EIG tree increases by factor $n$, the new information received remains quadratic which allows us to use arrays to store this information. Even the size of the echoed messages remains quadratic in every round. 
 
-\textbf{Extracting the final information:}\\
-Starting from the leaves, the nodes of the EIG tree are evaluated bottom-up. Every node is given a new value that is the strict majority of the new values of its children.
+ \textbf{Extracting the final information:}\\
+Starting from the leaves, the nodes of the EIG tree are evaluated bottom-up as follows:
+\begin{itemize}
+    \item if $x$ is a leaf, $\mathtt{newval}(x) \leftarrow \mathtt{val}(x)$.
+    \item if $x$ is root, $\mathtt{newval}(x) \leftarrow v$ such that strict majority of new values of its children are set to $v$, otherwise it is set to default value $v_0$.
+    \item otherwise, $\mathtt{newval}(x) \leftarrow v$ if for $T = \{y \mid y \text{ child of } x \wedge \mathtt{newval}(y) = \top\}$, $\mid T \mid \geq (n-t-l)$, and a strict majority of nodes in $T$ have $\mathtt{cval}$ set to $v$.
+\end{itemize}
+
+
+\subsubsection{Algorithm ImprovedEIG}
+\label{sec:modEIG}
+        We modify the \textit{EIG} protocol slightly to require that
+        instead of sending the complete byzantine list every time, from round
+        $4$ onwards only the changes to this list be sent in every round. We
+        are motivated to do so since sending information about the existence of
+        a process in the suspected byzantine list of another process in every
+        round is redundant. This does not change the correctness of the
+        algorithm since all the good processes send the same changes to every
+        other process in a round and in the next round the confirmation
+        mechanism would confirm these updated lists.  The rest of the algorithm
+        is identical to algorithm \textit{EIG}.  This means that the number of
+        rounds required to reach consensus remains unchanged as the information
+        every process has about the suspected byzantine list of another process
+        at the end of a round is the same as in algorithm \textit{EIG}. This
+        implies that the round complexity is unchanged, and therefore the
+        latency of the algorithm is unaffected.
+

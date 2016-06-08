@@ -21,14 +21,14 @@ which values to send at every round of the protocol.
 terms of CPU time utilization and elapsed real time, number of messages/bits
 sent per process, and the final decision value of each process. 
 
-\subsection{Testing parameters} For testing the three algorithms, the number of
+\subsection{Testing Parameters} For testing the three algorithms, the number of
 processes $(n)$ lies in the range $4$ to $64$ on a cluster of $1$ to $16$
 machines. The number of failures $(f)$ lies in the range $[0, n/3)$ for
     algorithms \textit{Pull-Push} and \textit{EIG}, and in the range $[0, n/4)$
         for algorithm \textit{Quorum}. The algorithms have been shown to be
         correct only in these respective ranges \cite{BGH13,KM13,BPV06}. 
 
-\subsection{Authentication of processes} It was assumed that the channels are
+\subsection{Authentication of Processes} It was assumed that the channels are
 authenticated and each receiving entity knows the identity of the sender. The
 communication primitives provided by the MPI library implicitly provide this
 functionality and hence, a byzantine process cannot spoof their identity or
@@ -39,10 +39,7 @@ knowledge about the network connection of other processes, i.e., the IP address
 and port number of the hosts it was connected to. Using the MPI library this is
 done by giving a unique ID to each process from $[0, n)$. The MPI
     point-to-point operations were used for sending and receiving messages
-    between (any) two processes. This behaves like a TCP connection and was
-    used for reliable transfer of messages between hosts. It also guarantees
-    order between messages.
-% The implementation does not make use of any shared resources.
+    between (any) two processes. The connection provides the same reliability and ordering guarantees as a TCP connection.
 
 \subsection{Synchronization} To implement a synchronous model of communication
 communicators have been used. They are essentially a group of processes.
@@ -67,26 +64,39 @@ message was given a unique tag number which corresponded to a unique system
 buffer.
 
 
-\subsection{Kinds of byzantine failures} \label{sec:behavior} A process can
+\subsection{Types of Byzantine Failures} \label{sec:behavior} A process can
 display either of the following failures: \\
 \textit{Active failures:}
-\begin{itemize} \item Processes send conflicting data to different processes in
+\begin{itemize} 
+        \item Processes send conflicting data to different processes in
             the same round. Any data that is not the same or is null is said to
-            be conflicting.  \item Processes send arbitrary content or more
+            be conflicting. 
+        \item Processes send arbitrary content or more
                 messages than necessary. Byzantine processes may try to do so
                 to choke the communication and flood the network or overload
-                the requests that need to be answered.  \end{itemize}
-            \textit{Inactive failures:} \begin{itemize} \item Crash failure:
+                the requests that need to be answered. 
+\end{itemize}
+For analysis of active failures, we inject both of the above mentioned
+failures, i.e., processes send conflicting data as well as attempt to flood the
+network.
+
+\noindent \textit{Inactive failures:} 
+\begin{itemize} 
+    \item Crash failure:
                         Processes may fail by stopping. Any good process that
                         fails to send messages or aborts its execution is
                         considered byzantine. This is a worst-case assumption
                         to ensure correctness even if for any unknown reason
-                        a good process fails.  \item Denial of service:
+                        a good process fails.  
+    \item Denial of service:
                             Byzantine processes may deny responding to requests
                             from good processes or may not forward messages as
-                            required.  \end{itemize}
+                            required.  
+\end{itemize}
+For analysis of inactive failures, crashed processes remain silent and stop
+sending messages to emulate node crash.
 
-\subsection{Fault tolerance against crash failures} We assume that once
+\subsection{Fault Tolerance Against Crash Failures} We assume that once
 a process suffers a crash failure, it cannot recover from it. An advantage of
 using TCP connections was that it allowed failure discovery in the case of
 a crash failure. If a process failed before the start of a phase, no other
@@ -97,15 +107,14 @@ completed within a certain amount of time and if all the processes did not
 reach the synchronization operation within that allotted time, it indicated
 a process failure and the other processes proceeded with the next phase. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%PUT THIS COMMENT BACK IF PAPER ACCEPTED%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%This mechanism worked since we were not dealing with more than $64$ processes
-%and by running the system multiple times we could determine a timeout value
-%that allowed alive processes to finish the phase with high probability. 
+By running the system multiple times we could determine a timeout value
+that allowed alive processes to finish the phase with high probability. 
 An alternative to this method was sending an acknowledgement back for each
 received message, but we refrained from using this method since that meant
 dealing with twice the number of messages which added unnecessary overhead for
 our testing purposes. 
 
-\subsection{Message format} Each message sent over the network was an array of
+\subsection{Message Format} Each message sent over the network was an array of
 bytes of the following form: \begin{equation*} \mathtt{LENGTH}, \mathtt{PHASE},
     \mathtt{MESSAGE} \end{equation*} The $\mathtt{LENGTH}$ parameter indicated
     how many bytes of the message to parse. The $\mathtt{PHASE}$ parameter
@@ -118,26 +127,27 @@ The format of the $\mathtt{MESSAGE}$ varied for each of the algorithms.
 
 \section{Results} \label{sec:results}
 
-\subsection{Bit Complexity} For the \textit{EIG} algorithm, from Figure
-\ref{fig:eig}, we can see that as the network size increases the bit complexity
+\subsection{Bit Complexity} For the \textit{EIG} algorithm, we can see from
+Figure \ref{fig:eig} that as the network size increases the bit complexity
 increases as a cubic function in accordance with the theoretical Big `O'
-complexity of $O(n^3 logn)$, where $n$ is the size of the network. This is
+complexity of $O(n^3 \log n)$, where $n$ is the size of the network. This is
 a major improvement from classic deterministic algorithms that have very high
-polynomial growth of $O(n^9)$ \cite{GarayM98}. On a linear scale we note that
-the fault ratio affects the bit complexity by a factor of $n$. This is because
+polynomial growth of $O(n^9)$ \cite{GarayM98}. On a linear scale, we note that
+the fault ratio affects the bit complexity by a factor polynomial in $n$. This is because
 with a higher ratio, faulty processes try to dominate the number of bits a good
 process receives by claiming all processes are byzantine in every round. They
 send $n^2$ bits of information in every round to every other process, whereas
 good processes send only $n*k$ bits of information. As the number of processes
-start to increase, the trends for each of the fault ratios becomes similar.
-However, for small networks, the bit complexity is quite diverse for different
-fault ratios. This shows that for systems with high variable size of the
-network, any fault ratio will affect the bandwidth consumption in a similar
-manner but for small networks with varying fault ratios, the bandwidth
-consumption can be affected greatly.   \begin{figure}[ht] \centering
+starts to increase, the trends for each of the fault ratios becomes similar on the $\log$ scale.
+However, for small networks, the bit complexity on the $\log$ scale is quite diverse for different
+fault ratios. Overall, we observe that increasing the fault ratio will affect
+the bandwidth consumption linearly for all network sizes.
+\begin{figure}[ht] \centering
+    \vspace{-2mm}
     \includegraphics[scale=0.4]{eig} 
     \caption{Performance results for EIG algorithm (Log Scale)} \label{fig:eig}
-    \end{figure}
+    \vspace{-4mm}
+\end{figure}
 
 %\begin{figure}[ht] \centering \includegraphics[scale=0.4]{eignolog}
 %\caption{Consensus results for EIG algorithm} \label{fig:eignolog}
@@ -151,15 +161,17 @@ attributed to the fact that in the protocol, even if byzantine processes try to
 send conflicting values, and a large number of them, to samplers for the
 purpose of flooding, the samplers do not receive enough of them to forward
 these messages further in the protocol. Also note that for networks with the
-same value of $logn$ the bits sent per process is the same, and it only changes
+same value of $\log n$ the bits sent per process is the same, and it only changes
 at network sizes that are powers of $2$. This is because good processes only
-communicate with samplers of size $logn$. Hence, for larger networks,
+communicate with samplers of size $\log n$. Hence, for larger networks,
 increasing the size of the network by less than $100\%$ will not affect the
 bandwidth consumption.  
 \begin{figure}[ht] \centering 
+    \vspace{-2mm}
     \includegraphics[scale=0.4]{pull_push} 
     \caption{Performance
     results for Pull-Push algorithm (Log scale)} \label{fig:pull_push}
+    \vspace{-4mm}
     \end{figure}
 
 From Figure \ref{fig:quorum}, algorithm \textit{Quorum} shows very high bits
@@ -173,67 +185,69 @@ increase bits on the network by participating in more sub-protocols than the
 algorithm requires since membership in a sub-protocol is dictated by their ID,
 which is fixed. Hence, increasing the number of byzantine processes does not
 the influence the (already high) communication cost greatly.
-\begin{figure}[ht] \centering \includegraphics[scale=0.4]{quorum}
+\begin{figure}[ht] \centering 
+    \vspace{-2mm}
+    \includegraphics[scale=0.4]{quorum}
      \caption{Performance results for Quorum algorithm (Log
-    scale)} \label{fig:quorum}  \end{figure}
+    scale)} \label{fig:quorum}  
+    \vspace{-4mm}
+\end{figure}
 
 %%%%%%%%%%%%%%Calculate confidence intervals over 20 trails next time. Also, include confidence level%%%%%%%%%%%%%%%%%
 Each of our algorithms for every configuration was run multiple times. In the
 analysis, each data point is an average over $5$ independent runs and we
 obtained confidence intervals for each of them. The confidence interval for
-algorithm \textit{Pull-Push} was $\pm 1\%$, for algorithm \textit{EIG}---$\pm
-0.1\%$, and $\pm 0.5\%$ for algorithm \textit{Quorum}.
+algorithm \textit{Pull-Push} was $\pm 1\%$, $\pm 0.1\%$ for algorithm \textit{EIG},
+and $\pm 0.5\%$ for algorithm \textit{Quorum}.
 
-\subsection{Comparison for bit complexity} For large networks ($n > 64$), we
+\subsection{Comparison of Bit Complexity} For large networks ($n = 64$), we
 vary the ratio of failures to the number of processes ($f/n$), which lies in
 the range $[0, 1/3)$ for algorithms \textit{EIG} and \textit{Pull-Push}, and in
-    the range $[0, 1/4)$ for algorithm \textit{Quorum}.  As can be seen from
-        Figure \ref{fig:comp}, the algorithm \textit{Pull-Push} performs much
-        better than the other algorithms for any fault percentage.
+the range $[0, 1/4)$ for algorithm \textit{Quorum}.  As can be seen from
+Figure \ref{fig:comp}, the algorithm \textit{Pull-Push} performs much
+better than the other algorithms for any fault percentage.
 
-        Next, we modify the \textit{EIG} protocol a little to require that
-        instead of sending the complete byzantine list every time, from round
-        $4$ onwards only the changes to this list be sent in every round. We
-        are motivated to do so since sending information about the existence of
-        a process in the suspected byzantine list of another process in every
-        round seems redundant. This does not change the correctness of the
-        algorithm since all the good processes send the same changes to every
-        other process in a round and in the next round the confirmation
-        mechanism would confirm these updated lists. The rest of the algorithm
-        works in the same way. Even though this does not change the
-        communication complexity in the worst case, it overall reduces the
-        communication bits as good processes would send a bit for every
-        suspected byzantine process only in any one of the rounds instead of
-        every round. This modified version of the algorithm performs much
-        better. For small ratios, since the number of rounds is small, the
-        number of bits sent per process remains the same. But, as the ratio
-        increases, it varies greatly from the performance of algorithm
-        \textit{EIG}.  \begin{figure}[ht] \centering 
+Next, we evaluate the modified algorithm \textit{ImprovedEIG} introduced in
+Section~\ref{sec:modEIG}. Even though this does not change the communication
+complexity in the worst case, it overall reduces the communication bits as good
+processes would send a bit for every suspected byzantine process only in any
+one of the rounds instead of every round. This modified version of the
+algorithm performs much better. For small ratios, since the number of rounds is
+small, the number of bits sent per process remains the same. But, as the ratio
+increases, the performance varies greatly from that of algorithm \textit{EIG}.
+\begin{figure}[ht] \centering 
+    \vspace{-2mm}
             \includegraphics[scale=0.4]{LargeNetBit} 
             \caption{Comparison for large networks} \label{fig:comp}
+    \vspace{-4mm}
              \end{figure}
 
 %\begin{figure}[ht] \centering \includegraphics[scale=0.4]{Fault667}
 %\caption{Comparison for low \% of faults} \label{fig:fault667} \vspace{-4mm}
 %\end{figure}
 
-\begin{figure}[ht] \centering  \includegraphics[scale=0.4]{Fault5}
+\begin{figure}[ht] \centering
+    \vspace{-2mm}
+    \includegraphics[scale=0.4]{Fault5}
      \caption{Comparison for low \% of failures}
-    \label{fig:fault5}  \end{figure}
+    \label{fig:fault5}  
+    \vspace{-6mm}
+\end{figure}
 
 \begin{figure}[ht] \centering 
     \includegraphics[scale=0.4]{Fault25}  \caption{Comparison for
-    high \% of failures} \label{fig:fault25} \end{figure}
+    high \% of failures} \label{fig:fault25} 
+    \vspace{-4mm}
+\end{figure}
 
 For small networks ($n < 40$), if the fault ratio is small and in the range
 $[0, 1/15)$, Figure~\ref{fig:fault5} shows that algorithm \textit{EIG} performs
-    much better than any of the other algorithms. This is simply because only
+    much better than any of the other algorithms. This is because only
     the first three rounds of this algorithm will be executed and since the
     ratio is small, a simple broadcast is sufficient to gather all the
     information. \textit{Pull-Push} and \textit{Quorum}, which are more complex
-    algorithms, perform worse in such scenarios. Figure~\ref{fig:fault25} shows
-    that for higher fault ratios and any network size, algorithm
-    \textit{Pull-Push} performs better.
+    algorithms, perform worse in such scenarios. Figure~\ref{fig:fault25} shows that for higher fault ratios
+    and any network size, algorithm \textit{Pull-Push} performs better.
 
     Depending on the system requirements, such as how fast we want the
     information to reach the destination, bandwidth, and so on, there were two
@@ -267,18 +281,28 @@ algorithm \textit{Pull-Push}, the push phase makes one round and sending,
 routing and answering in the pull phase each form independent rounds.
 
 \begin{figure}[ht] \centering 
+    \vspace{-2mm}
     \includegraphics[scale=0.4]{Round16}  \caption{Round
-    Complexity comparison} \label{fig:round16}  \end{figure}
+    Complexity comparison} \label{fig:round16}  
+    \vspace{-6mm}
+\end{figure}
 
 \begin{figure}[ht] \centering \includegraphics[scale=0.4]{Round6}
     \caption{Round Complexity comparison} \label{fig:round6}
+    \vspace{-4mm}
     \end{figure}
 
 A comparison of the round complexities can be seen in Figs. \ref{fig:round16}
-and \ref{fig:round6} for fault percentage $~16.5\%$ and $~6.5\%$, respectively.
-We can see that for the very small ratio of $~6.5\%$ the round complexity of
-\textit{EIG} is better, but for larger ratios and larger networks $(n > 40)$
-\textit{Quorum} performs better than the other two. 
+and \ref{fig:round6} for fault percentage $\mathtt{\sim}16.5\%$ and
+$\mathtt{\sim}6.5\%$, respectively. We can see that for the very small ratio of
+$\mathtt{\sim}6.5\%$ the round complexity of \textit{EIG} is best compared to
+\textit{Quorum} as well as \textit{Pull-Push} for all network sizes. However,
+for larger ratios \textit{EIG} performs the best for small network sizes among
+the three algorithms. It performs worse than the other two algorithms for
+larger networks while \textit{Quorum} performs the best here.  For the fault
+percentage of $\mathtt{\sim}16.5\%$ we can see that for larger networks $(n
+> 40)$, \textit{Quorum} starts performing better from among the three
+algorithms.
 
 
 \subsection{Latency}
@@ -298,13 +322,19 @@ trade-off here is that the CPU time utilization of \textit{Quorum} is a lot
 more than that of \textit{Pull-Push}. This trend is maintained for all fault
 ratios.
 
-\begin{figure}[ht] \centering \includegraphics[scale=0.4]{cpu16}
+\begin{figure}[ht] \centering
+    \vspace{-2mm}
+    \includegraphics[scale=0.4]{cpu16}
     \caption{CPU time utilization comparison} \label{fig:cpu}
+    \vspace{-4mm}
     \end{figure}
 
 \begin{figure}[ht] \centering 
+    \vspace{-2mm}
     \includegraphics[scale=0.4]{elapsed16} \caption{Elapsed real time
-    comparison} \label{fig:elapsed} \end{figure}
+    comparison} \label{fig:elapsed} 
+    \vspace{-4mm}
+\end{figure}
 
 %Fig. \ref{fig:time} the first mechanism for calculating time complexity of
 %algorithm Quorum is used, where it is considered that all the subprotocols

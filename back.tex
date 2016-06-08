@@ -1,7 +1,7 @@
 ﻿\section{Background}
 \label{sec:background}
 
-\subsection{Problem statement}
+\subsection{Problem Statement}
 The problem of Byzantine Agreement, in its most basic form is defined as follows \cite{PeaseSL80}:
 
 \begin{definition}
@@ -17,9 +17,10 @@ A protocol is said to be $k$-fault tolerant if it operates correctly as long as 
 
 \begin{theorem}
 There is a $k$-fault tolerant synchronous protocol to solve the byzantine agreement problem iff $k < n/3$.
+\hfill \qedsymbol
 \end{theorem}
 
-\subsection{Complexity measures}
+\subsection{Complexity Measures}
 
 The practicality of agreement protocols depends heavily on their computational complexity. Theoretically, when talking about complexity measures of algorithms for distributed consensus, one generally uses the following two metrics:
 \begin{itemize}
@@ -33,7 +34,7 @@ For empirical analysis, we also consider the following metric:
 \end{itemize}
 %All of these quantities are in general dependent on which faults occur and when, and how parallel the algorithm is. As the size of the system increases, i.e., the number of processes increase, the expected number of faults grows linearly with it. Also, for example, a highly parallel system might require more memory but reduces the round complexity. Round complexity is also an indication of how much of the algorithm can be executed in parallel.
 
-\subsection{Previous work}
+\subsection{Previous Work}
 
 \subsubsection{Deterministic Solutions}
 Fischer and Lynch \cite{Fischer81alower} proved that $k + 1$ is the round
@@ -119,7 +120,7 @@ by King et al.~\cite{KSSV06}.
 theoretical results for the Byzantine Agreement problem. In a recent paper by
 Vavala et al.~\cite{VN12} that implements Bracha's algorithm \cite{Bracha84} to
 bridge the gap between theory and practice, it was reported that the literature
-is poor in the experimental evaluations of byzantine agreement algorithms. They
+is poor in the experimental evaluations of randomized byzantine agreement algorithms. They
 showed that Bracha's algorithm terminates in constant rounds if only crash
 failures occur and under normal conditions, whereas theoretically it takes
 exponential number of rounds to terminate due to the worst-case scenario. They
@@ -146,7 +147,7 @@ process the requests. In this experimental evaluation, the authors concentrated
 on the implementation and analysis of the byzantine broadcast part of the
 algorithm that is used to reach consensus on the order of requests to be
 processed by the state machines. They reported the latency when the batch size
-of the requests to $4$ servers is varied. Other works such as those by Moniz et
+of the requests to $4$ servers is varied. Several other experimental evaluations for state machine replication methods use byzantine agreement protocols but mostly in the asynchronous settings and some protocols even require a trusted subsystem \cite{AGGRW, CMLRS, VCBL, KBCD, KADCW}. Other works such as those by Moniz et
 al.~\cite{MNC10, MNCV11} consider wireless and asynchronous settings,
 respectively, which is outside the scope of this paper.
 
@@ -155,4 +156,6 @@ a partially synchronous model for simplicity. The algorithms we have chosen
 allow us to differentiate and compare different randomized as well as
 deterministic algorithms which makes it necessary to use a synchronous setting
 due to the impossibility results for the asynchronous case \cite{FischerLP83}. 
+
+
 
